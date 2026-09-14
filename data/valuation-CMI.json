@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:59:16.567934Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 165.79
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Construction Machinery & Heavy Transportation Equipment",
+  "name": "Cummins",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 560.75
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=26172&owner=exclude",
+  "sector": "Industrials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "CMI"
+}

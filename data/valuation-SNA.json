@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:37:47.714362Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 234.09
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Industrial Machinery & Supplies & Components",
+  "name": "Snap-on",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 383.0
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=91440&owner=exclude",
+  "sector": "Industrials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "SNA"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:56:31.443186Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 149.27
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Construction Machinery & Heavy Transportation Equipment",
+  "name": "Caterpillar Inc.",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 813.94
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=18230&owner=exclude",
+  "sector": "Industrials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "CAT"
+}

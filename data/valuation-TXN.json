@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:43:17.979326Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 48.77
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Semiconductors",
+  "name": "Texas Instruments",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 258.44
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=97476&owner=exclude",
+  "sector": "Information Technology",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "TXN"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:19:39.622462Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 210.99
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Diversified Banks",
+  "name": "JPMorgan Chase",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 358.64
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=19617&owner=exclude",
+  "sector": "Financials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "JPM"
+}

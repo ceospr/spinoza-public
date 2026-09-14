@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:00:54.082883Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "available",
+      "value": 47.86
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Multi-Family Residential REITs",
+  "name": "Camden Property Trust",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 105.69
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=906345&owner=exclude",
+  "sector": "Real Estate",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "CPT"
+}

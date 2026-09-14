@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:21:09.639035Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 10.11
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Personal Care Products",
+  "name": "Kenvue",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 18.74
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1944048&owner=exclude",
+  "sector": "Consumer Staples",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "KVUE"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:26:09.781850Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 70.35
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Pharmaceuticals",
+  "name": "Merck & Co.",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 150.33
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=310158&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "MRK"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:02:01.646376Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 53.36
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "IT Consulting & Other Services",
+  "name": "Cognizant",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 62.31
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1058290&owner=exclude",
+  "sector": "Information Technology",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "CTSH"
+}

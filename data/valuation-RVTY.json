@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:36:47.686070Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 20.97
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Health Care Equipment",
+  "name": "Revvity",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 130.22
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=31791&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "RVTY"
+}

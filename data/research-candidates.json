@@ -1,0 +1,91 @@
+{
+  "longs": [
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 56.29,
+      "name": "Comcast",
+      "price": 26.49,
+      "price_date": "2026-09-04",
+      "report_sha256": "6abf4b8a67fabb2ac0906f837211dea1a85c10385193f6d2c7e512b45f747364",
+      "sector": "Communication Services",
+      "symbol": "CMCSA"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 63.35,
+      "name": "Devon Energy",
+      "price": 48.06,
+      "price_date": "2026-09-04",
+      "report_sha256": "9cda0a57ae3f3036d5d121d031e4af3efbfd03236659b52c80db4fdd52e918bf",
+      "sector": "Energy",
+      "symbol": "DVN"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 87.09,
+      "name": "Edison International",
+      "price": 56.77,
+      "price_date": "2026-09-04",
+      "report_sha256": "a6847dbc0693b180bebea690b6503ba63dc8065bf813db61f613a70dec6d766f",
+      "sector": "Utilities",
+      "symbol": "EIX"
+    }
+  ],
+  "published_at_utc": "2026-09-08T14:57:28.720846Z",
+  "research_only": true,
+  "schema_version": "spinoza.public-research.v1",
+  "shorts": [
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 20.13,
+      "name": "CVS Health",
+      "price": 96.74,
+      "price_date": "2026-09-04",
+      "report_sha256": "b45f2bb9386e7cd803c6d87be5b91968a6f5c4eb5231a18ae38c390391cdaafe",
+      "sector": "Health Care",
+      "symbol": "CVS"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 17.74,
+      "name": "Flex Ltd.",
+      "price": 109.51,
+      "price_date": "2026-09-04",
+      "report_sha256": "34001fcaef85c2b3dd7a4249e27d4bb0ffb4cec330b4b9861c78ec03634524c8",
+      "sector": "Information Technology",
+      "symbol": "FLEX"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 17.02,
+      "name": "Interactive Brokers",
+      "price": 92.62,
+      "price_date": "2026-09-04",
+      "report_sha256": "56597faba2e683627137c46aca120304e998acb1e257baaf46a7ce9bdf588c8a",
+      "sector": "Financials",
+      "symbol": "IBKR"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 7.84,
+      "name": "Southwest Airlines",
+      "price": 39.62,
+      "price_date": "2026-09-04",
+      "report_sha256": "c82943a7fcfeee6174db1c582e3546b0e3a7d8a41a978b7f8b72836aa4ab46bd",
+      "sector": "Industrials",
+      "symbol": "LUV"
+    },
+    {
+      "currency": "USD",
+      "intrinsic_estimate": 7.18,
+      "name": "MGM Resorts",
+      "price": 41.22,
+      "price_date": "2026-09-04",
+      "report_sha256": "4b18fd514ab4b73c4b551e8ec0ba86d103d8213db6f98f526237813453f03a67",
+      "sector": "Consumer Discretionary",
+      "symbol": "MGM"
+    }
+  ],
+  "status": "published",
+  "valid_until_utc": "2026-09-09T00:00:00Z"
+}

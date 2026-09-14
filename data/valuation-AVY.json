@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:52:38.762750Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 94.33
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Paper & Plastic Packaging Products & Materials",
+  "name": "Avery Dennison",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 175.06
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=8818&owner=exclude",
+  "sector": "Materials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "AVY"
+}

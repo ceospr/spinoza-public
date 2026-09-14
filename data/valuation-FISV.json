@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:10:31.921202Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Transaction & Payment Processing Services",
+  "name": "Fiserv",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 53.0
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=798354&owner=exclude",
+  "sector": "Financials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "FISV"
+}

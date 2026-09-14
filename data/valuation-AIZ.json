@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:49:08.594825Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 219.02
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Multi-line Insurance",
+  "name": "Assurant",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 285.74
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1267238&owner=exclude",
+  "sector": "Financials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "AIZ"
+}

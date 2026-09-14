@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:49:33.225397Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 54.1
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Health Care Equipment",
+  "name": "Zimmer Biomet",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 98.07
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1136869&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "ZBH"
+}

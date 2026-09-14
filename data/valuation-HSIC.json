@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:15:54.550961Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 37.98
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Health Care Distributors",
+  "name": "Henry Schein",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 89.81
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1000228&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "HSIC"
+}

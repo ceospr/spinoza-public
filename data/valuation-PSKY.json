@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:34:10.084234Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Movies & Entertainment",
+  "name": "Paramount Skydance Corporation",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 10.86
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=2041610&owner=exclude",
+  "sector": "Communication Services",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PSKY"
+}

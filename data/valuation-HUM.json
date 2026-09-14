@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:16:24.562886Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 130.94
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Managed Health Care",
+  "name": "Humana",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 401.54
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=49071&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "HUM"
+}

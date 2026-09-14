@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:30:09.962072Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Cargo Ground Transportation",
+  "name": "Old Dominion",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 185.87
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=878927&owner=exclude",
+  "sector": "Industrials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "ODFL"
+}

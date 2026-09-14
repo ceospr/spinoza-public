@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:34:32.604220Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 60.84
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Construction & Engineering",
+  "name": "Quanta Services",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 624.41
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1050915&owner=exclude",
+  "sector": "Industrials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PWR"
+}

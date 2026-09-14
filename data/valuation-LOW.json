@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:22:39.701138Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 133.57
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Home Improvement Retail",
+  "name": "Lowe's",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 204.45
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=60667&owner=exclude",
+  "sector": "Consumer Discretionary",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "LOW"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:32:10.000121Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 92.04
+    },
+    "relative": {
+      "status": "available",
+      "value": 166.25
+    }
+  },
+  "industry": "Personal Care Products",
+  "name": "Procter & Gamble",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 146.44
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=80424&owner=exclude",
+  "sector": "Consumer Staples",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PG"
+}

@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:57:54.006434Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 41.21
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Household Products",
+  "name": "Church & Dwight",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 98.55
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=313927&owner=exclude",
+  "sector": "Consumer Staples",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "CHD"
+}

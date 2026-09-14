@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:29:39.931680Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 11.78
+    },
+    "relative": {
+      "status": "available",
+      "value": 34.16
+    }
+  },
+  "industry": "Publishing",
+  "name": "News Corp (Class B)",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 33.9
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1564708&owner=exclude",
+  "sector": "Communication Services",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "NWS"
+}

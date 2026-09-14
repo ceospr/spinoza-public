@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:13:46.981407Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Consumer Electronics",
+  "name": "Garmin",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 277.03
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1121788&owner=exclude",
+  "sector": "Consumer Discretionary",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "GRMN"
+}

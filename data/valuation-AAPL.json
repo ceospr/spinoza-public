@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T13:47:08.481060Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 68.33
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Technology Hardware, Storage & Peripherals",
+  "name": "Apple Inc.",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 319.97
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=320193&owner=exclude",
+  "sector": "Information Technology",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "AAPL"
+}

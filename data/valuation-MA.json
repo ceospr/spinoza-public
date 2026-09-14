@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:23:32.237724Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 188.58
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Transaction & Payment Processing Services",
+  "name": "Mastercard",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 579.21
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1141391&owner=exclude",
+  "sector": "Financials",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "MA"
+}

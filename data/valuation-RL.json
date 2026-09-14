@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:35:47.627302Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 115.22
+    },
+    "relative": {
+      "status": "available",
+      "value": 314.54
+    }
+  },
+  "industry": "Apparel, Accessories & Luxury Goods",
+  "name": "Ralph Lauren Corporation",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 351.2
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1037038&owner=exclude",
+  "sector": "Consumer Discretionary",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "RL"
+}

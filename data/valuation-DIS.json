@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:04:09.268334Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 31.88
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Movies & Entertainment",
+  "name": "Walt Disney Company (The)",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 105.31
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1744489&owner=exclude",
+  "sector": "Communication Services",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "DIS"
+}

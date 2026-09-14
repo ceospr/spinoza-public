@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:08:01.875903Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 57.63
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Electric Utilities",
+  "name": "Entergy",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 107.27
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=65984&owner=exclude",
+  "sector": "Utilities",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "ETR"
+}

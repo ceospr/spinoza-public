@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:34:02.580475Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "available",
+      "value": 128.41
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Self-Storage REITs",
+  "name": "Public Storage",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 302.01
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1393311&owner=exclude",
+  "sector": "Real Estate",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PSA"
+}

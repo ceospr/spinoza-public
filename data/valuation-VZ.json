@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:46:40.611399Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 52.47
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Integrated Telecommunication Services",
+  "name": "Verizon",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 50.14
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=732712&owner=exclude",
+  "sector": "Communication Services",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "VZ"
+}

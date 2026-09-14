@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:45:55.592627Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Internet Services & Infrastructure",
+  "name": "Verisign",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 292.08
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1014473&owner=exclude",
+  "sector": "Information Technology",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "VRSN"
+}

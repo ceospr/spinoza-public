@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:46:55.609098Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 105.25
+    },
+    "relative": {
+      "status": "available",
+      "value": 121.56
+    }
+  },
+  "industry": "Life Sciences Tools & Services",
+  "name": "Waters Corporation",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 409.38
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1000697&owner=exclude",
+  "sector": "Health Care",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "WAT"
+}

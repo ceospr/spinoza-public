@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:34:17.577414Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 113.98
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Oil & Gas Refining & Marketing",
+  "name": "Phillips 66",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 255.09
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1534701&owner=exclude",
+  "sector": "Energy",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PSX"
+}

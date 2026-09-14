@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:17:39.585306Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 125.29
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Application Software",
+  "name": "Intuit",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 332.7
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=896878&owner=exclude",
+  "sector": "Information Technology",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "INTU"
+}

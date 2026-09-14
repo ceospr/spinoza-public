@@ -1,0 +1,29 @@
+{
+  "as_of_utc": "2026-09-08T14:37:02.682275Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "unavailable",
+      "value": null
+    },
+    "intrinsic": {
+      "status": "available",
+      "value": 17.57
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Restaurants",
+  "name": "Starbucks",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 104.47
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=829224&owner=exclude",
+  "sector": "Consumer Discretionary",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "SBUX"
+}

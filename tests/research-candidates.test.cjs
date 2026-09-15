@@ -143,7 +143,7 @@ test('public HTML uses local external scripts with restrictive CSP', () => {
     assert(html.includes('http-equiv="Content-Security-Policy"'), file);
     assert(html.includes("script-src 'self'"), file);
     assert(!html.includes('unsafe-inline'), file);
-    for (const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {assert(/\bsrc="[a-z0-9-]+\.js"/.test(script[1]), file); assert.equal(script[2].trim(), '');}
+    for (const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {assert(/\bsrc="[a-z0-9-]+\.js(?:\?v=[a-z0-9-]+)?"/.test(script[1]), file); assert.equal(script[2].trim(), '');}
     for (const src of html.matchAll(/\b(?:src|href)="([^"?#]+)(?:[?#][^"]*)?"/g)) {
       if (/^(?:[a-z]+:|#)/i.test(src[1])) continue;
       assert(fs.existsSync(path.join(root, src[1])), `${file}: ${src[1]}`);

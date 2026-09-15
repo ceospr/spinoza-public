@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'self'"><meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Preview | Spinoza Research</title>
+  <meta name="description" content="Portfolio performance, investment research and equity valuation analysis from Spinoza Research.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/logo-512.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="research.css">
+  <link rel="stylesheet" href="research-candidates.css">
+  <link rel="stylesheet" href="dashboard-preview.css">
+  <script defer src="public-schema.js?v=20260915-preview"></script>
+  <script defer src="dashboard.js?v=20260915-preview"></script>
+  <script defer src="research-status.js"></script>
+  <script defer src="research.js"></script>
+  <script defer src="research-candidates.js"></script>
+</head>
+<body class="dashboard-preview" data-dashboard-source="review/dashboard.json">
+  <a class="skip-link" href="#dashboard">Skip to content</a>
+  <header class="nav"><div class="container nav-inner">
+    <a class="brand" href="index.html" aria-label="Spinoza Research home"><img src="assets/logo.svg" alt="" class="logo-img"><span class="brand-name">Spinoza Research</span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#dashboard" aria-current="page">Performance</a><a href="#atlas-pulse">Research Candidates</a><a href="research.html">Research</a><a href="valuation.html">Equity Valuation</a><a href="#contact">Contact</a>
+    </nav>
+  </div></header>
+  <aside class="preview-notice" aria-label="Dashboard preview notice"><div class="container preview-notice-inner"><div><strong>Dashboard preview</strong><p>Fixed snapshot for review · September 14, 2026. These results and positions are not a live feed.</p><p>Snapshot as of <span id="preview_snapshot_date">September 14, 2026, 1:20 PM Pacific</span></p></div><a href="index.html">Return to the current site →</a></div></aside>
+  <main id="top">
+    <section id="dashboard" class="hero"><div class="container hero-inner"><div><p class="eyebrow">Portfolio reporting</p><h1 class="title">Portfolio Performance</h1><p class="subtitle">Account results, completed trades and recorded positions.</p></div></div></section>
+    <section class="section section-tight"><div class="container">
+      <div class="section-heading"><div><h2>Account Returns &amp; Drawdown</h2><p>Aggregate account results at the snapshot date.</p></div><p class="data-stamp">As of <strong id="updated_at">Loading…</strong></p></div>
+      <div class="kpi-grid account-kpis">
+        <article class="kpi"><span>Since inception</span><strong id="since_inception_return_pct">—</strong></article>
+        <article class="kpi"><span>Year to date</span><strong id="ytd_return_pct">—</strong></article>
+        <article class="kpi"><span>Daily return</span><strong id="daily_return_pct">—</strong></article>
+        <article class="kpi"><span>Maximum drawdown</span><strong id="max_drawdown_pct">—</strong></article>
+      </div>
+      <p class="metrics-status" id="performance_status" aria-live="polite">Loading published results…</p>
+    </div></section>
+    <section class="section section-tight"><div class="container"><section class="panel">
+      <div class="panel-head"><h2>Monthly Performance</h2><p>Return on net contributions, using the New York reporting calendar. An incomplete month is month-to-date; these are not chainable time-weighted returns.</p></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Monthly performance"><table><thead><tr><th scope="col">Month</th><th scope="col" class="dashboard-number">Return</th></tr></thead><tbody id="monthly_table_body"><tr><td colspan="2" class="empty">Loading monthly results…</td></tr></tbody></table></div>
+    </section></div></section>
+    <section id="trade-results" class="section section-tight"><div class="container">
+      <div class="section-heading"><div><h2>Trade Results</h2><p>Statistics for the published closed-trade history below.</p></div></div>
+      <div class="kpi-grid trade-kpis">
+        <article class="kpi"><span>Win rate</span><strong id="win_rate_pct">—</strong></article>
+        <article class="kpi"><span>Profit factor</span><strong id="profit_factor">—</strong></article>
+        <article class="kpi"><span>Closed trades</span><strong id="closed_trades_count">—</strong></article>
+        <article class="kpi"><span>Winning trades</span><strong id="winning_trades_count">—</strong></article>
+        <article class="kpi"><span>Losing trades</span><strong id="losing_trades_count">—</strong></article>
+        <article class="kpi"><span>Breakeven trades</span><strong id="breakeven_trades_count">—</strong></article>
+      </div>
+      <p class="account-scope">Account returns and drawdown cover the account. Trade statistics cover the published closed-trade history, which can have a different scope.</p>
+      <details class="metric-notes"><summary>Reading these results</summary><p>Profit factor compares gross realized dollar gains with gross realized dollar losses in the eligible closed-trade history. It is unavailable when the source does not support that comparison or the denominator is zero.</p><p>Trade returns reflect matched fills. Fees, dividends and borrow costs are excluded unless recorded in the source. Breakeven trades are distinct from wins and losses. An unavailable metric is not zero.</p></details>
+    </div></section>
+    <section id="positions" class="section section-tight"><div class="container"><section class="panel">
+      <div class="panel-head"><h2>Current Positions</h2><p id="positions_as_of">Positions at the snapshot time · September 14, 2026, 1:20 PM Pacific</p><p class="record-status"><span id="open_positions_count">—</span> reported open positions · <span id="position_records_status">Loading…</span></p></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Positions at the snapshot time"><table class="positions-table"><thead><tr><th scope="col">Ticker</th><th scope="col">Direction</th><th scope="col" class="dashboard-number">Average entry</th><th scope="col" class="dashboard-number">Latest price</th><th scope="col" class="dashboard-number">Unrealized return</th></tr></thead><tbody id="positions_table_body"><tr><td colspan="5" class="empty">Loading recorded positions…</td></tr></tbody></table></div>
+      <p class="panel-note">Latest price and unrealized return belong to this dated snapshot. They do not update with the market on this preview.</p>
+    </section></div></section>
+    <section id="trade-history" class="section section-tight"><div class="container"><section class="panel">
+      <div class="panel-head"><h2>Trade History</h2><p>Completed entries and exits, with realized percentage returns.</p><p id="trade_records_status" class="record-status">Loading completed-trade records…</p></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Completed trade history"><table class="trade-table"><thead><tr><th scope="col">Ticker</th><th scope="col">Direction</th><th scope="col">Entry date</th><th scope="col">Exit date</th><th scope="col" class="dashboard-number">Entry price</th><th scope="col" class="dashboard-number">Exit price</th><th scope="col" class="dashboard-number">Realized return</th></tr></thead><tbody id="trade_table_body"><tr><td colspan="7" class="empty">Loading completed trades…</td></tr></tbody></table></div>
+      <p class="panel-note">Dates are the recorded calendar dates. Prices are shown in USD. Separate matched exits can share the same ticker and dates.</p>
+    </section></div></section>
+    <section id="atlas-pulse" class="section section-tight"><div class="container"><section class="panel atlas-panel">
+      <div class="panel-head atlas-panel-head"><div><p class="eyebrow">Equity research</p><h2>Research Candidates</h2><p>Selected research conclusions, listed alphabetically.</p></div><div class="candidate-status" role="status" aria-live="polite"><strong id="research_candidates_status">Loading research publication…</strong><small id="research_candidates_date"></small></div></div>
+      <p class="candidate-coverage">These dated research lists are separate from live trading. Estimates are conditional and are not price forecasts.</p>
+      <div class="atlas-sleeves">
+        <article class="atlas-sleeve atlas-sleeve-long"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Long research</span><h3>Long Candidates</h3></div><span class="candidate-count" id="research_candidates_long_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Long research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th></tr></thead><tbody id="research_candidates_long_body"><tr><td colspan="3" class="empty">Loading research…</td></tr></tbody></table></div></article>
+        <article class="atlas-sleeve atlas-sleeve-short"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Short research</span><h3>Short Candidates</h3></div><span class="candidate-count" id="research_candidates_short_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Short research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th></tr></thead><tbody id="research_candidates_short_body"><tr><td colspan="3" class="empty">Loading research…</td></tr></tbody></table></div></article>
+      </div>
+      <p class="candidate-coverage">Archived research retains its original observation dates. A new publication is required before an expired list can be considered current.</p>
+      <noscript><p class="candidate-coverage">JavaScript is required to display research candidates.</p></noscript>
+    </section></div></section>
+    <section id="research-return-tracker" class="section section-tight"><div class="container"><section class="panel">
+      <div class="panel-head"><h2>Research Return Tracker</h2><p id="atlas_tracker_status" aria-live="polite">Loading published research returns…</p><p class="data-stamp" id="atlas_tracker_updated"></p></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Aggregate research returns"><table><thead><tr><th>Month</th><th>Research return</th></tr></thead><tbody id="research_return_body"><tr><td colspan="2" class="empty">Loading…</td></tr></tbody></table></div>
+      <p class="candidate-coverage">Aggregate research returns are separate from live account performance.</p>
+    </section></div></section>
+    <section id="research" class="section"><div class="container">
+      <div class="section-heading"><div><p class="eyebrow">Publications</p><h2>Research Library</h2><p>Investment ideas, market analysis and valuation methods.</p></div><a class="text-link" href="research.html">View all research <span aria-hidden="true">→</span></a></div>
+      <div class="research-categories"><a href="investment-ideas.html">Investment Ideas</a><a href="market-trends.html">Market Trends</a><a href="research.html?category=methods">Valuation Methods</a></div>
+      <div id="research-preview" aria-live="polite"><p class="muted">Loading publications…</p></div>
+      <noscript><p><a href="research.html">Browse the research library</a></p></noscript>
+    </div></section>
+
+    <section id="equity-valuation" class="section section-alt"><div class="container valuation-intro">
+      <div><p class="eyebrow">Company analysis</p><h2>Equity Valuation</h2><p>Search published company reports. Review dated final estimates and company summaries.</p><p class="small muted">Reports identify unavailable estimates and keep income scenarios separate from intrinsic equity value.</p></div>
+      <div><form class="valuation-search" action="valuation.html" method="get"><label for="company-search">Company or ticker</label><div class="search-field"><input id="company-search" name="q" type="search" placeholder="e.g. AAPL or Apple" maxlength="100" autocomplete="off"><button class="button" type="submit">Search reports</button></div></form><a class="text-link" href="valuation.html">Explore company reports <span aria-hidden="true">→</span></a></div>
+    </div></section>
+
+    <section id="contact" class="section"><div class="container contact-row"><div><p class="eyebrow">Contact</p><h2>Research enquiries</h2><p>For discussion of published research and methodology.</p></div><a class="contact-email" href="mailto:research@spinozaresearch.com">research@spinozaresearch.com</a></div></section>
+
+    <section id="disclaimer" class="section section-tight"><div class="container"><details class="disclaimer"><summary>Disclosures</summary><p>This website is for research and informational purposes only. Nothing on this website constitutes financial, investment, legal, or tax advice.</p><p>Spinoza Research is a private research initiative and is not a registered investment adviser. Nothing herein is an offer to sell or a solicitation to buy any security or investment product.</p><p>Live-account results and hypothetical research estimates are identified separately. Past performance does not guarantee future results.</p></details></div></section>
+  </main>
+  <footer class="footer"><div class="container footer-inner"><span>&copy; <span id="year"></span> Spinoza Research</span><div><a href="research.html">Research</a><a href="valuation.html">Equity Valuation</a><a href="#disclaimer">Disclosures</a></div></div></footer>
+</body>
+</html>

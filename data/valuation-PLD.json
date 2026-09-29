@@ -1,1 +1,29 @@
-{"analysis":{"assumptions":[{"label":"Long-run growth","source":"Explicit model assumption","unit":"ratio","value":0.0},{"label":"Cost of equity","source":"Explicit model assumption","unit":"ratio","value":0.11250000000000002},{"label":"Annual common dividend","source":"Explicit model assumption","unit":"per_share","value":4.04}],"baseline":{"method":"Latest sourced annual common dividend; income only, not asset NAV.","period":"annual","period_end":"2025-12-31","period_start":"2025-01-01","values":[{"label":"Reported annual common dividend","source":"Observed financial baseline","unit":"per_share","value":4.04},{"label":"Modeled annual common dividend","source":"Observed financial baseline","unit":"per_share","value":4.04}]},"basis":"reit_dividend_income","market_implied":{"note":"These are separate reverse-valuation calculations. Scaling earnings can also scale the required profit margins at the modeled revenue; the source description states each calculation's conditions. They are not forecasts and do not set the intrinsic estimate.","recorded_price":null,"requirements":[{"label":"Required starting common EPS","source":"Dividend income is not total intrinsic value.","unit":"per_share","value":null},{"label":"Required initial revenue growth","source":"A property/FFO valuation is required for a market-implied total equity comparison.","unit":"ratio","value":null}]},"model_name":"REIT dividend-income scenario (not property NAV)","model_version":"forward_intrinsic_v2","policy_sha256":"0f01035645d7b01cddc2a79cd3ed866173b42104f0907fecf1ed0adcc7ef091b","reasons":[],"scenarios":[{"assumptions":[{"label":"Long-run growth","source":"Explicit model assumption","unit":"ratio","value":0.0},{"label":"Discount rate","source":"Explicit model assumption","unit":"ratio","value":0.1275},{"label":"Annual common dividend","source":"Explicit model assumption","unit":"per_share","value":3.232}],"name":"bear","value":25.34901960784314},{"assumptions":[{"label":"Long-run growth","source":"Explicit model assumption","unit":"ratio","value":0.0},{"label":"Discount rate","source":"Explicit model assumption","unit":"ratio","value":0.11250000000000002},{"label":"Annual common dividend","source":"Explicit model assumption","unit":"per_share","value":4.04}],"name":"base","value":35.911111111111104},{"assumptions":[{"label":"Long-run growth","source":"Explicit model assumption","unit":"ratio","value":0.0},{"label":"Discount rate","source":"Explicit model assumption","unit":"ratio","value":0.09750000000000002},{"label":"Annual common dividend","source":"Explicit model assumption","unit":"per_share","value":4.444000000000001}],"name":"bull","value":45.57948717948718}],"status":"estimated","warnings":["Damodaran implied ERP unavailable; configured fallback used (ValueError).","Three annual common dividends per share on the cash paid basis; paid and declared amounts are never combined.","Dividends can include returns of capital or exceptional distributions; this series alone does not establish property NAV or dividend sustainability.","REIT dividend income can include returned capital and omit retained property value. It is not property NAV or total intrinsic value and cannot support a short conclusion."]},"as_of_utc":"2026-09-08T14:32:47.528412Z","currency":"USD","estimates":{"income":{"status":"available","value":35.911111111111104},"intrinsic":{"status":"unavailable","value":null},"relative":{"status":"unavailable","value":null}},"industry":"Industrial REITs","name":"Prologis","quote":{"date":"2026-09-04","value":137.33999633789062},"recalculated_at_utc":"2026-09-29T05:37:27.446460Z","schema_version":"spinoza.public-valuation.v2","sec_filings_url":"https://www.sec.gov/edgar/browse/?CIK=1045609&owner=exclude","sector":"Real Estate","summary":"Recalculated with current model from archived inputs. Quotes and financial periods retain their original dates. Conditional estimates depend on the captured financial inputs and model assumptions. An unavailable estimate does not mean a business has no value.","symbol":"PLD"}
+{
+  "as_of_utc": "2026-09-08T14:32:47.528412Z",
+  "currency": "USD",
+  "estimates": {
+    "income": {
+      "status": "available",
+      "value": 33.66
+    },
+    "intrinsic": {
+      "status": "unavailable",
+      "value": null
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "industry": "Industrial REITs",
+  "name": "Prologis",
+  "quote": {
+    "date": "2026-09-04",
+    "value": 137.34
+  },
+  "schema_version": "spinoza.public-valuation.v1",
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1045609&owner=exclude",
+  "sector": "Real Estate",
+  "summary": "Dated research estimates are conditional and are not price forecasts. An unavailable estimate is not a zero value. Income scenarios are separate from intrinsic equity value.",
+  "symbol": "PLD"
+}

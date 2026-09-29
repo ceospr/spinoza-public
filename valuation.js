@@ -14,7 +14,49 @@ const EquityValuation = (() => {
     for (const kind of ['intrinsic', 'relative', 'income']) if ((report.estimates[kind].status === 'available') !== entry[kind + '_available']) throw Error('The report does not match the published availability status.');
     return report;
   }
-  return Object.freeze({money, normalize, filter, validateReport, secUrl: schema.secUrl});
+  function formatFact(fact, currency) {
+    if (typeof fact.value !== 'number' || !Number.isFinite(fact.value)) return 'Unavailable';
+    if (fact.unit === 'ratio') return new Intl.NumberFormat('en-US', {style: 'percent', maximumFractionDigits: 1}).format(fact.value);
+    if (fact.unit === 'money' || fact.unit === 'per_share') return money(fact.value, currency);
+    return new Intl.NumberFormat('en-US', {maximumFractionDigits: 2}).format(fact.value);
+  }
+  function renderForwardAnalysis(report, doc) {
+    if (report.schema_version !== 'spinoza.public-valuation.v2') return [];
+    const model = report.analysis;
+    const el = (tag, content, cls) => {const node = doc.createElement(tag); if (content !== undefined) node.textContent = content; if (cls) node.className = cls; return node;};
+    const facts = rows => {
+      const list = el('dl', undefined, 'ev-model-facts');
+      for (const row of rows) {const item = el('div'); item.append(el('dt', row.label), el('dd', formatFact(row, report.currency))); if (row.source) item.append(el('small', row.source)); list.appendChild(item);}
+      return list;
+    };
+    const section = (title, note) => {const node = el('section', undefined, 'ev-card'); node.append(el('h2', title)); if (note) node.append(el('p', note, 'ev-caption')); return node;};
+    const scenarios = section('Bear, base and bull scenarios', 'Conditional values per share. These cases vary assumptions together; they are not probabilities or future price targets.');
+    scenarios.append(el('p', `${model.model_name} · ${model.model_version}`, 'ev-caption'));
+    const grid = el('div', undefined, 'ev-scenario-grid');
+    for (const name of ['bear', 'base', 'bull']) {
+      const row = model.scenarios.find(item => item.name === name), card = el('section', undefined, 'ev-scenario');
+      card.append(el('h3', name[0].toUpperCase() + name.slice(1)), el('p', model.status === 'estimated' ? money(row.value, report.currency) : 'Unavailable', 'ev-scenario-value'));
+      if (row.assumptions.length) {const detail = el('details'); detail.append(el('summary', 'Scenario assumptions'), facts(row.assumptions)); card.append(detail);}
+      grid.append(card);
+    }
+    scenarios.append(grid);
+    for (const reason of model.reasons) scenarios.append(el('p', reason, 'ev-gap-box'));
+    const baseline = model.baseline;
+    const period = baseline.period === 'ttm' ? 'Trailing twelve months (TTM)' : baseline.period === 'annual' ? 'Last fiscal year (annual; not current TTM)' : 'Financial period unavailable';
+    const evidence = section(model.basis === 'reit_dividend_income' ? 'Dividend baseline and income assumptions' : 'Earnings baseline and forecast assumptions', `${period} · ${baseline.period_start || 'Start unavailable'} to ${baseline.period_end || 'End unavailable'}`);
+    evidence.append(el('p', baseline.method, 'ev-caption'), facts(baseline.values));
+    if (model.assumptions.length) evidence.append(el('h3', 'Base scenario assumptions'), facts(model.assumptions));
+    if (model.warnings.length) {
+      const details = el('details', undefined, 'ev-details'), list = el('ul', undefined, 'ev-small-list');
+      details.append(el('summary', `${model.warnings.length} source and model notes`));
+      for (const warning of model.warnings) list.append(el('li', warning));
+      details.append(list); evidence.append(details);
+    }
+    const market = section('What would justify the recorded price?', `Price used: ${money(model.market_implied.recorded_price, report.currency)} · ${report.quote.date || 'Date unavailable'}. Each calculation changes the stated earnings or growth requirement; its description identifies what is held constant.`);
+    market.append(facts(model.market_implied.requirements), el('p', model.market_implied.note, 'ev-caption'));
+    return [scenarios, evidence, market];
+  }
+  return Object.freeze({money, normalize, filter, validateReport, formatFact, renderForwardAnalysis, secUrl: schema.secUrl});
 })();
 if (typeof module === 'object' && module.exports) module.exports = EquityValuation;
 
@@ -47,10 +89,11 @@ if (typeof document !== 'undefined') (async () => {
     const heading = el('section', undefined, 'ev-report-heading');
     const top = el('div', undefined, 'ev-symbol-line'); top.append(el('span', report.symbol, 'ev-symbol'), el('span', report.sector));
     heading.append(top, el('h2', report.name), el('p', report.industry, 'ev-caption'));
+    if (report.recalculated_at_utc) heading.append(el('p', 'Recalculated with current model from archived inputs. Recorded price date: ' + (report.quote.date || 'unavailable') + '. Financial period ended: ' + (report.analysis.baseline.period_end || 'unavailable') + '.', 'ev-notice'));
     const values = el('dl', undefined, 'ev-kpis');
     function kpi(title, value, note) {const item = el('div', undefined, 'ev-kpi'); item.append(el('dt', title), el('dd', value), el('small', note)); values.appendChild(item);}
     kpi('Recorded closing price', E.money(report.quote.value, report.currency), `${report.currency} · ${report.quote.date || 'Date unavailable'} · not live`);
-    kpi('Intrinsic estimate per share', E.money(report.estimates.intrinsic.value, report.currency), 'Conditional equity estimate');
+    kpi(report.analysis ? 'Base intrinsic estimate per share' : 'Intrinsic estimate per share', E.money(report.estimates.intrinsic.value, report.currency), report.analysis ? report.analysis.model_name : 'Conditional equity estimate · archived model');
     kpi('Relative estimate per share', E.money(report.estimates.relative.value, report.currency), 'A pricing comparison; separate from intrinsic value');
     if (report.estimates.income.status === 'available') kpi('Income scenario per share', E.money(report.estimates.income.value, report.currency), 'Separate from intrinsic equity value or property NAV');
     heading.appendChild(values);
@@ -58,7 +101,8 @@ if (typeof document !== 'undefined') (async () => {
     if (E.secUrl(report.sec_filings_url)) {const link = el('a', 'View SEC filings ↗', 'ev-action'); link.href = report.sec_filings_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; actions.appendChild(link);}
     const print = el('button', 'Print report', 'ev-action'); print.type = 'button'; print.addEventListener('click', () => window.print()); actions.appendChild(print); heading.appendChild(actions);
     const conclusion = el('section', undefined, 'ev-card'); conclusion.append(el('h2', 'Reading this estimate'), el('p', report.summary, 'ev-caption'), el('p', 'Research as of ' + (report.as_of_utc ? new Date(report.as_of_utc).toLocaleString() : 'date unavailable'), 'ev-caption'));
-    panel.replaceChildren(heading, conclusion);
+    if (report.recalculated_at_utc) conclusion.append(el('p', 'Model recalculated ' + new Date(report.recalculated_at_utc).toLocaleString() + ' using archived inputs; quote date remains ' + (report.quote.date || 'unavailable') + '.', 'ev-caption'));
+    panel.replaceChildren(heading, ...E.renderForwardAnalysis(report, document), conclusion);
   }
 
   async function selectCompany(entry, updateUrl) {

@@ -27,6 +27,19 @@
 .ev-company-status{display:block;font-size:10px;color:#718094;margin-top:5px}
 #more-results{margin-top:12px;width:100%}
 .ev-report{min-width:0}
+.ev-scenario-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.ev-scenario{border:1px solid #dbe0e7;border-radius:6px;padding:16px;min-width:0}
+.ev-scenario:nth-child(2){border-color:#617998;background:#f5f8fb}
+.ev-scenario h3{font-size:13px;margin:0 0 8px}
+.ev-scenario-value{font-size:24px;font-weight:650;margin:0 0 16px;overflow-wrap:anywhere}
+.ev-scenario summary{font-size:12px;cursor:pointer}
+.ev-model-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
+.ev-model-facts>div{min-width:0}
+.ev-model-facts dt{font-size:12px;color:#536176}
+.ev-model-facts dd{margin:4px 0;font-size:16px;font-weight:600;overflow-wrap:anywhere}
+.ev-model-facts small{font-size:11px;line-height:1.5;color:#647184;display:block;overflow-wrap:anywhere}
+.ev-scenario .ev-model-facts{grid-template-columns:1fr}
+@media(max-width:600px){.ev-scenario-grid,.ev-model-facts{grid-template-columns:1fr}}
 .ev-empty,.ev-card,.ev-report-heading{background:#fff;border:1px solid #dbe0e7;border-radius:8px;padding:24px;margin-bottom:18px}
 .ev-empty{padding:48px 28px}
 .ev-empty h2,.ev-card h2{margin:0 0 12px;font-size:19px;letter-spacing:-.015em}

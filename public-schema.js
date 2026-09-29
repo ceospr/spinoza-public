@@ -67,12 +67,24 @@
   function estimate(value) {
     return keys(value, ["status", "value"]) && ((value.status === "available" && finite(value.value)) || (value.status === "unavailable" && value.value === null));
   }
+  const fact = value => keys(value, ["label", "value", "unit", "source"]) && text(value.label) && numeric(value.value) && ["ratio", "per_share", "money", "number"].includes(value.unit) && text(value.source);
+  function forwardAnalysis(value) {
+    return keys(value, ["model_version", "model_name", "basis", "status", "policy_sha256", "baseline", "assumptions", "scenarios", "market_implied", "reasons", "warnings"]) && value.model_version === "forward_intrinsic_v2" && text(value.model_name) && ["forward_operating_dcf", "forward_equity_distribution", "forward_financial_equity", "reit_dividend_income"].includes(value.basis) && ["estimated", "unavailable"].includes(value.status) && hash(value.policy_sha256) &&
+      keys(value.baseline, ["period", "period_start", "period_end", "method", "values"]) && ["annual", "ttm", "unavailable"].includes(value.baseline.period) && [value.baseline.period_start, value.baseline.period_end].every(item => item === null || day(item)) && text(value.baseline.method) && list(value.baseline.values, fact) && list(value.assumptions, fact) &&
+      list(value.scenarios, row => keys(row, ["name", "value", "assumptions"]) && ["bear", "base", "bull"].includes(row.name) && numeric(row.value) && list(row.assumptions, fact)) && unique(value.scenarios, "name") && value.scenarios.length === 3 &&
+      keys(value.market_implied, ["recorded_price", "requirements", "note"]) && numeric(value.market_implied.recorded_price) && list(value.market_implied.requirements, fact) && text(value.market_implied.note) && list(value.reasons, text) && list(value.warnings, text);
+  }
   function valuation(value) {
-    return keys(value, ["schema_version", "symbol", "name", "sector", "industry", "currency", "as_of_utc", "quote", "estimates", "sec_filings_url", "summary"]) && value.schema_version === "spinoza.public-valuation.v1" && symbol(value.symbol) && currency(value.currency) &&
+    const v2 = value?.schema_version === "spinoza.public-valuation.v2";
+    const fields = ["schema_version", "symbol", "name", "sector", "industry", "currency", "as_of_utc", "quote", "estimates", "sec_filings_url", "summary"];
+    if (v2) fields.push("analysis", "recalculated_at_utc");
+    return keys(value, fields) && (v2 || value.schema_version === "spinoza.public-valuation.v1") && symbol(value.symbol) && currency(value.currency) &&
       [value.name, value.sector, value.industry, value.summary].every(text) && timestamp(value.as_of_utc) &&
       keys(value.quote, ["date", "value"]) && (value.quote.date === null || day(value.quote.date)) && numeric(value.quote.value) &&
       keys(value.estimates, ["intrinsic", "relative", "income"]) && Object.values(value.estimates).every(estimate) &&
-      (value.sec_filings_url === null || secUrl(value.sec_filings_url));
+      (value.sec_filings_url === null || secUrl(value.sec_filings_url)) && (!v2 || (timestamp(value.recalculated_at_utc) && forwardAnalysis(value.analysis) && (value.analysis.status !== "unavailable" || (value.estimates.intrinsic.status === "unavailable" && value.estimates.income.status === "unavailable")) &&
+      (value.estimates.intrinsic.status !== "available" || (value.analysis.basis !== "reit_dividend_income" && value.analysis.scenarios.find(row => row.name === "base").value === value.estimates.intrinsic.value)) &&
+      (value.estimates.income.status !== "available" || (value.analysis.basis === "reit_dividend_income" && value.analysis.scenarios.find(row => row.name === "base").value === value.estimates.income.value))));
   }
   function valuationIndex(value) {
     return keys(value, ["schema_version", "generated_at_utc", "companies"]) && value.schema_version === "spinoza.public-valuation-index.v1" && timestamp(value.generated_at_utc) &&

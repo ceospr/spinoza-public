@@ -1,0 +1,161 @@
+{
+  "schema_version": "spinoza.public-valuation.v2",
+  "symbol": "TEST",
+  "name": "Test Company",
+  "sector": "Industrials",
+  "industry": "Equipment",
+  "currency": "USD",
+  "as_of_utc": "2026-09-04T12:00:00Z",
+  "quote": {
+    "value": 150,
+    "date": "2026-09-04"
+  },
+  "estimates": {
+    "intrinsic": {
+      "status": "available",
+      "value": 120
+    },
+    "relative": {
+      "status": "unavailable",
+      "value": null
+    },
+    "income": {
+      "status": "unavailable",
+      "value": null
+    }
+  },
+  "sec_filings_url": "https://www.sec.gov/edgar/browse/?CIK=1234&owner=exclude",
+  "summary": "Recalculated with current model from archived inputs. Quotes and financial periods retain their original dates. Conditional estimates depend on the captured financial inputs and model assumptions. An unavailable estimate does not mean a business has no value.",
+  "recalculated_at_utc": "2026-09-28T12:00:00Z",
+  "analysis": {
+    "model_version": "forward_intrinsic_v2",
+    "model_name": "Forward common-equity distribution valuation",
+    "basis": "forward_equity_distribution",
+    "status": "estimated",
+    "policy_sha256": "ea878da68f99ee786e0e67b95c0b07cbfd7b0dfcc4e0a1e988dcecaba7eac285",
+    "baseline": {
+      "period": "ttm",
+      "period_start": "2025-07-01",
+      "period_end": "2026-06-30",
+      "method": "Reported trailing earnings plus a sourced unusual charge.",
+      "values": [
+        {
+          "label": "Reported common EPS",
+          "value": 12,
+          "unit": "per_share",
+          "source": "Observed financial baseline"
+        },
+        {
+          "label": "Normalized common EPS",
+          "value": 13,
+          "unit": "per_share",
+          "source": "Documented model normalization"
+        },
+        {
+          "label": "Revenue",
+          "value": 100000,
+          "unit": "money",
+          "source": "Observed financial baseline"
+        }
+      ]
+    },
+    "assumptions": [
+      {
+        "label": "Initial revenue growth",
+        "value": 0.12,
+        "unit": "ratio",
+        "source": "Explicit model assumption"
+      },
+      {
+        "label": "Long-run growth",
+        "value": 0.025,
+        "unit": "ratio",
+        "source": "Explicit model assumption"
+      },
+      {
+        "label": "Discount rate",
+        "value": 0.1,
+        "unit": "ratio",
+        "source": "Explicit model assumption"
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "bear",
+        "value": 80,
+        "assumptions": [
+          {
+            "label": "Initial revenue growth",
+            "value": 0.05,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          },
+          {
+            "label": "Discount rate",
+            "value": 0.12,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          }
+        ]
+      },
+      {
+        "name": "base",
+        "value": 120,
+        "assumptions": [
+          {
+            "label": "Initial revenue growth",
+            "value": 0.12,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          },
+          {
+            "label": "Discount rate",
+            "value": 0.1,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          }
+        ]
+      },
+      {
+        "name": "bull",
+        "value": 180,
+        "assumptions": [
+          {
+            "label": "Initial revenue growth",
+            "value": 0.18,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          },
+          {
+            "label": "Discount rate",
+            "value": 0.09,
+            "unit": "ratio",
+            "source": "Explicit model assumption"
+          }
+        ]
+      }
+    ],
+    "market_implied": {
+      "recorded_price": 150,
+      "requirements": [
+        {
+          "label": "Required starting common EPS",
+          "value": 16.25,
+          "unit": "per_share",
+          "source": "Starting earnings holding other assumptions fixed."
+        },
+        {
+          "label": "Required initial revenue growth",
+          "value": null,
+          "unit": "ratio",
+          "source": "No solution in the supported growth range."
+        }
+      ],
+      "note": "These are separate reverse-valuation calculations. Scaling earnings can also scale the required profit margins at the modeled revenue; the source description states each calculation's conditions. They are not forecasts and do not set the intrinsic estimate."
+    },
+    "reasons": [],
+    "warnings": [
+      "A conditional forecast."
+    ]
+  }
+}

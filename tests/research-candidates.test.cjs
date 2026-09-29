@@ -54,16 +54,21 @@ test('every public data file matches an approved display schema', () => {
   }
 });
 
-test('research references bind to the exact sanitized company report and final estimate', () => {
+test('research selections resolve values and links from the exact current company report', async () => {
+  const fetchImpl = async url => {const bytes = fs.readFileSync(path.join(root, url)); return {ok: true, json: async () => JSON.parse(bytes), arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)};};
+  const canonical = await candidates.resolveReports(candidatesData, {fetchImpl, cryptoImpl: crypto.webcrypto});
   for (const row of [...candidatesData.longs, ...candidatesData.shorts]) {
     const entry = index.companies.find(item => item.symbol === row.symbol);
     assert(entry);
-    assert.equal(row.report_sha256, entry.sha256);
+    const resolved = canonical.get(row.symbol);
+    assert(resolved.report, row.symbol);
+    assert.equal(resolved.report_sha256, entry.sha256);
     const report = data(entry.file);
-    assert.equal(row.intrinsic_estimate, report.estimates.intrinsic.value);
-    assert.equal(row.price, report.quote.value);
-    assert.equal(row.price_date, report.quote.date);
-    assert.doesNotThrow(() => valuation.validateReport(report, entry, row.report_sha256));
+    assert.equal(resolved.report.estimates.intrinsic.value, report.estimates.intrinsic.value);
+    assert.equal(resolved.report.quote.value, report.quote.value);
+    assert.equal(resolved.report.quote.date, report.quote.date);
+    assert.equal(resolved.selection_report_changed, row.report_sha256 !== entry.sha256);
+    assert.doesNotThrow(() => valuation.validateReport(report, entry, resolved.report_sha256));
     assert.throws(() => valuation.validateReport(report, entry, '0'.repeat(64)));
   }
 });
@@ -116,7 +121,7 @@ test('research text remains text when feed fields contain HTML', () => {
   assert(body.textContent.includes(hostile));
   const tags = node => [node.tagName, ...node.children.flatMap(tags)];
   assert(!tags(body).includes('img'));
-  assert.equal(document.getElementById('research_candidates_status').textContent, 'Archived research');
+  assert.equal(document.getElementById('research_candidates_status').textContent, 'Archived selection');
 });
 
 test('dashboard handles partial metrics and renders monthly values without HTML', () => {

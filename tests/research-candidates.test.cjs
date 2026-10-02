@@ -116,7 +116,7 @@ test('research text remains text when feed fields contain HTML', () => {
   payload.longs[0].name = hostile; payload.longs[0].sector = hostile;
   assert(S.research(payload));
   const document = documentMock();
-  candidates.render(payload, document, new Date('2026-09-14T20:00:00Z'));
+  candidates.render(payload, document, new Date(Date.parse(payload.valid_until_utc) + 86400000));
   const body = document.getElementById('research_candidates_long_body');
   assert(body.textContent.includes(hostile));
   const tags = node => [node.tagName, ...node.children.flatMap(tags)];

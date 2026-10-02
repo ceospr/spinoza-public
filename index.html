@@ -10,12 +10,12 @@
   <link rel="apple-touch-icon" href="assets/logo-512.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="research.css">
-  <link rel="stylesheet" href="research-candidates.css?v=forward-v2-20260929">
-  <script defer src="public-schema.js?v=forward-v2-20260929"></script>
+  <link rel="stylesheet" href="research-candidates.css?v=october-research-20261002">
+  <script defer src="public-schema.js?v=october-research-20261002"></script>
   <script defer src="dashboard.js"></script>
-  <script defer src="research-status.js"></script>
+  <script defer src="research-status.js?v=october-research-20261002"></script>
   <script defer src="research.js"></script>
-  <script defer src="research-candidates.js?v=forward-v2-20260929"></script>
+  <script defer src="research-candidates.js?v=october-research-20261002"></script>
 </head>
 <body>
   <a class="skip-link" href="#dashboard">Skip to content</a>
@@ -44,18 +44,19 @@
     </section></div></section>
     <section id="atlas-pulse" class="section section-tight"><div class="container"><section class="panel atlas-panel">
       <div class="panel-head atlas-panel-head"><div><p class="eyebrow">Equity research</p><h2>Research Candidates</h2><p>Selected research conclusions, listed alphabetically.</p></div><div class="candidate-status" role="status" aria-live="polite"><strong id="research_candidates_status">Loading research publication…</strong><small id="research_candidates_date"></small></div></div>
-      <p class="candidate-coverage">These dated research lists are separate from live trading. Estimates are conditional and are not price forecasts.</p>
+      <p class="candidate-coverage">These dated research lists are separate from live trading. Intrinsic estimates value the business; Atlas Pulse month-end projections show the stated price scenario and assumptions.</p>
       <div class="atlas-sleeves">
-        <article class="atlas-sleeve atlas-sleeve-long"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Long research</span><h3>Long Candidates</h3></div><span class="candidate-count" id="research_candidates_long_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Long research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th></tr></thead><tbody id="research_candidates_long_body"><tr><td colspan="3" class="empty">Loading research…</td></tr></tbody></table></div></article>
-        <article class="atlas-sleeve atlas-sleeve-short"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Short research</span><h3>Short Candidates</h3></div><span class="candidate-count" id="research_candidates_short_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Short research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th></tr></thead><tbody id="research_candidates_short_body"><tr><td colspan="3" class="empty">Loading research…</td></tr></tbody></table></div></article>
+        <article class="atlas-sleeve atlas-sleeve-long"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Long research</span><h3>Long Candidates</h3></div><span class="candidate-count" id="research_candidates_long_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Long research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th><th>Atlas Pulse month-end projection</th></tr></thead><tbody id="research_candidates_long_body"><tr><td colspan="4" class="empty">Loading research…</td></tr></tbody></table></div></article>
+        <article class="atlas-sleeve atlas-sleeve-short"><div class="atlas-sleeve-head"><div><span class="atlas-side-label">Short research</span><h3>Short Candidates</h3></div><span class="candidate-count" id="research_candidates_short_count"></span></div><div class="table-wrap atlas-table-wrap" tabindex="0" role="region" aria-label="Short research candidates"><table class="atlas-table candidate-table"><thead><tr><th>Company</th><th>Recorded price</th><th>Intrinsic estimate</th><th>Atlas Pulse month-end projection</th></tr></thead><tbody id="research_candidates_short_body"><tr><td colspan="4" class="empty">Loading research…</td></tr></tbody></table></div></article>
       </div>
+      <p class="candidate-coverage" id="research_candidates_projection_methodology"></p>
       <p class="candidate-coverage">Archived research retains its original observation dates. A new publication is required before an expired list can be considered current.</p>
       <noscript><p class="candidate-coverage">JavaScript is required to display research candidates.</p></noscript>
     </section></div></section>
     <section id="research-return-tracker" class="section section-tight"><div class="container"><section class="panel">
       <div class="panel-head"><h2>Research Return Tracker</h2><p id="atlas_tracker_status" aria-live="polite">Loading published research returns…</p><p class="data-stamp" id="atlas_tracker_updated"></p></div>
       <div class="table-wrap" tabindex="0" role="region" aria-label="Aggregate research returns"><table><thead><tr><th>Month</th><th>Research return</th></tr></thead><tbody id="research_return_body"><tr><td colspan="2" class="empty">Loading…</td></tr></tbody></table></div>
-      <p class="candidate-coverage">Aggregate research returns are separate from live account performance.</p>
+      <p class="candidate-coverage" id="atlas_tracker_methodology">Aggregate research returns are separate from live account performance.</p>
     </section></div></section>
     <section id="research" class="section"><div class="container">
       <div class="section-heading"><div><p class="eyebrow">Publications</p><h2>Research Library</h2><p>Investment ideas, market analysis and valuation methods.</p></div><a class="text-link" href="research.html">View all research <span aria-hidden="true">→</span></a></div>

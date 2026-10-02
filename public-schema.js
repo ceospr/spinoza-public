@@ -90,15 +90,43 @@
     return keys(value, ["schema_version", "generated_at_utc", "companies"]) && value.schema_version === "spinoza.public-valuation-index.v1" && timestamp(value.generated_at_utc) &&
       list(value.companies, row => keys(row, ["symbol", "name", "sector", "industry", "file", "sha256", "intrinsic_available", "relative_available", "income_available"]) && symbol(row.symbol) && [row.name, row.sector, row.industry].every(text) && row.file === `valuation-${row.symbol}.json` && hash(row.sha256) && [row.intrinsic_available, row.relative_available, row.income_available].every(item => typeof item === "boolean")) && unique(value.companies, "symbol");
   }
+  function monthEndForecast(value) {
+    return keys(value, ["status", "value", "month", "as_of_utc", "model_version"], ["target_date", "methodology", "kind"]) &&
+      ["available", "unavailable"].includes(value.status) && (value.status === "available" ? finite(value.value) && value.value > 0 : value.value === null) &&
+      month(value.month) && value.as_of_utc !== null && timestamp(value.as_of_utc) && text(value.model_version) && value.model_version.length > 0 &&
+      (!Object.hasOwn(value, "target_date") || (day(value.target_date) && value.target_date.startsWith(value.month))) &&
+      (!Object.hasOwn(value, "methodology") || text(value.methodology)) &&
+      (!Object.hasOwn(value, "kind") || ["conditional_projection", "model_forecast"].includes(value.kind));
+  }
   function candidate(value) {
-    return keys(value, ["symbol", "name", "sector", "currency", "price", "price_date", "intrinsic_estimate", "report_sha256"]) && symbol(value.symbol) && currency(value.currency) && text(value.name) && text(value.sector) && finite(value.price) && value.price > 0 && day(value.price_date) && finite(value.intrinsic_estimate) && hash(value.report_sha256);
+    return keys(value, ["symbol", "name", "sector", "currency", "price", "price_date", "intrinsic_estimate", "report_sha256"], ["month_end_forecast"]) && symbol(value.symbol) && currency(value.currency) && text(value.name) && text(value.sector) && finite(value.price) && value.price > 0 && day(value.price_date) && finite(value.intrinsic_estimate) && hash(value.report_sha256) && (!Object.hasOwn(value, "month_end_forecast") || monthEndForecast(value.month_end_forecast));
+  }
+  function marketDate(value) {
+    const parts = new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit'}).formatToParts(new Date(value));
+    const part = type => parts.find(item => item.type === type).value;
+    return `${part('year')}-${part('month')}-${part('day')}`;
+  }
+  function forecastMatchesPublication(row, publication) {
+    const forecast = row.month_end_forecast;
+    if (!forecast) return true;
+    if (publication.published_at_utc === null) return false;
+    const publishedDate = marketDate(publication.published_at_utc), observedDate = marketDate(forecast.as_of_utc);
+    return forecast.month === publishedDate.slice(0, 7) && forecast.month === observedDate.slice(0, 7) &&
+      Date.parse(forecast.as_of_utc) <= Date.parse(publication.published_at_utc) &&
+      (!forecast.target_date || forecast.target_date > observedDate);
   }
   function research(value) {
     return keys(value, ["schema_version", "research_only", "published_at_utc", "valid_until_utc", "status", "longs", "shorts"]) && value.schema_version === "spinoza.public-research.v1" && value.research_only === true && timestamp(value.published_at_utc) && timestamp(value.valid_until_utc) && ["published", "unavailable"].includes(value.status) && list(value.longs, candidate) && list(value.shorts, candidate) && unique([...value.longs, ...value.shorts], "symbol") &&
+      [...value.longs, ...value.shorts].every(row => forecastMatchesPublication(row, value)) &&
       (value.status !== "published" || (value.published_at_utc !== null && value.valid_until_utc !== null && Date.parse(value.valid_until_utc) >= Date.parse(value.published_at_utc) && value.longs.length + value.shorts.length > 0));
   }
   function tracker(value) {
-    return keys(value, ["schema_version", "updated_at_utc", "status", "months"]) && value.schema_version === "spinoza.public-research-performance.v1" && timestamp(value.updated_at_utc) && ["published", "unavailable"].includes(value.status) && list(value.months, row => period(row, "month", month)) && unique(value.months, "month");
+    return keys(value, ["schema_version", "updated_at_utc", "status", "months"], ["methodology"]) && value.schema_version === "spinoza.public-research-performance.v1" && timestamp(value.updated_at_utc) && ["published", "unavailable"].includes(value.status) &&
+      (!Object.hasOwn(value, "methodology") || text(value.methodology)) && list(value.months, row =>
+        keys(row, ["month", "return_pct"], ["start_date", "end_date", "methodology", "status"]) && month(row.month) && finite(row.return_pct) &&
+        (!Object.hasOwn(row, "start_date") || day(row.start_date)) && (!Object.hasOwn(row, "end_date") || day(row.end_date)) &&
+        (!row.start_date || !row.end_date || row.start_date <= row.end_date) && (!row.end_date || row.end_date.startsWith(row.month)) &&
+        (!Object.hasOwn(row, "methodology") || text(row.methodology)) && (!Object.hasOwn(row, "status") || ["final", "month_to_date"].includes(row.status))) && unique(value.months, "month");
   }
   return Object.freeze({dashboard, valuation, valuationIndex, research, tracker, secUrl});
 });

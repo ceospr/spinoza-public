@@ -127,13 +127,17 @@
     if (!forecast) return true;
     if (publication.published_at_utc === null) return false;
     const publishedDate = marketDate(publication.published_at_utc), observedDate = marketDate(forecast.as_of_utc);
-    if (forecast.model_version === 'atlas_pulse_monthly_history_gap_v1') {
+    if (['atlas_pulse_monthly_history_gap_v1', 'atlas_pulse_monthly_history_gap_v2'].includes(forecast.model_version)) {
       if (forecast.kind !== 'conditional_projection' || !forecast.target_date || row.intrinsic_estimate <= 0) return false;
       if (!forecast.inputs) {
         if (forecast.status !== 'unavailable' || forecast.reason !== 'insufficient_history') return false;
       } else {
         const m = Math.abs(forecast.inputs.average_monthly_return), p = row.price, v = row.intrinsic_estimate;
-        const projected = side === 'LONG' ? p + (v - p) * m * p : p - (p / v) * m * p * p / 100;
+        let delta = side === 'LONG' ? (v - p) * m * p : -(p / v) * m * p * p / 100;
+        const limit = 2 * m * p;
+        if (!Number.isFinite(delta) || !Number.isFinite(limit)) return false;
+        if (forecast.model_version === 'atlas_pulse_monthly_history_gap_v2') while (Math.abs(delta) > limit) delta /= 2;
+        const projected = p + delta;
         if (!Number.isFinite(projected)) return false;
         if (projected <= 0) {
           if (forecast.status !== 'unavailable' || forecast.reason !== 'nonpositive_projection') return false;

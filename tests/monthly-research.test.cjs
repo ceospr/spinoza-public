@@ -82,26 +82,31 @@ test('forecast contract rejects mismatched horizons, contradictory availability 
   }
 });
 
-function historyScenario(side = 'LONG') {
+function historyScenario(side = 'LONG', version = 'atlas_pulse_monthly_history_gap_v1') {
   const f = fixture();
   const dates = ['2025-12-31', '2026-01-30', '2026-02-27', '2026-03-31', '2026-04-30', '2026-05-29', '2026-06-30', '2026-07-31', '2026-08-31', '2026-09-30'];
   const closes = dates.map((date, index) => ({date, value: 100 * 1.02 ** index}));
   const mean = closes.slice(1).reduce((sum, row, index) => sum + row.value / closes[index].value - 1, 0) / 9;
   f.row.intrinsic_estimate = side === 'LONG' ? 150 : 60;
   const forecast = f.row.month_end_forecast;
-  forecast.model_version = 'atlas_pulse_monthly_history_gap_v1';
+  forecast.model_version = version;
   forecast.inputs = {average_monthly_return: mean, monthly_closes: closes, price_basis: 'split_adjusted_close'};
   forecast.value = side === 'LONG' ? 120 + 30 * Math.abs(mean) * 120 : 120 - 2 * Math.abs(mean) * 120 * 120 / 100;
+  if (version === 'atlas_pulse_monthly_history_gap_v2') {
+    let move = forecast.value - 120;
+    while (Math.abs(move) > 2 * Math.abs(mean) * 120) move /= 2;
+    forecast.value = 120 + move;
+  }
   if (side === 'SHORT') {f.payload.longs = []; f.payload.shorts = [f.row];}
   return f;
 }
 
 test('history projection binds the completed-month average and side-specific requested formula', () => {
-  for (const side of ['LONG', 'SHORT']) {
-    const f = historyScenario(side);
+  for (const version of ['atlas_pulse_monthly_history_gap_v1', 'atlas_pulse_monthly_history_gap_v2']) for (const side of ['LONG', 'SHORT']) {
+    const f = historyScenario(side, version);
     assert(schema.research(f.payload));
     assert.equal(f.row.month_end_forecast.inputs.monthly_closes.length, 10);
-    if (side === 'LONG') assert(f.row.month_end_forecast.value > f.row.intrinsic_estimate, 'Requested arithmetic must not be silently capped at fair value');
+    if (side === 'LONG' && version.endsWith('_v1')) assert(f.row.month_end_forecast.value > f.row.intrinsic_estimate, 'Legacy arithmetic must remain valid');
     for (const mutate of [
       p => p.value += 1,
       p => p.inputs.average_monthly_return *= -2,
@@ -116,6 +121,32 @@ test('history projection binds the completed-month average and side-specific req
   const f = historyScenario('SHORT');
   f.row.month_end_forecast.value = 120 - 2 * Math.abs(f.row.month_end_forecast.inputs.average_monthly_return) * 120;
   assert.equal(schema.research(f.payload), false, 'Applying share price only once is not the requested short formula');
+});
+
+test('v2 repeatedly halves a move to the two-average threshold and checks the resulting price', () => {
+  for (const [side, fairValue, expected] of [
+    ['LONG', 11, 12.5], ['LONG', 12, 15], ['LONG', 14, 15], ['LONG', 50, 13.125],
+    ['SHORT', 1, 7.5], ['SHORT', .5, 5], ['SHORT', .25, 5], ['SHORT', .2, 6.875],
+  ]) {
+    const f = historyScenario(side, 'atlas_pulse_monthly_history_gap_v2');
+    f.row.price = 10; f.row.intrinsic_estimate = fairValue;
+    const forecast = f.row.month_end_forecast;
+    forecast.inputs.monthly_closes.forEach((row, index) => row.value = 100 * 1.25 ** index);
+    forecast.inputs.average_monthly_return = .25;
+    forecast.value = expected;
+    assert(schema.research(f.payload), `${side} ${fairValue} must produce ${expected}`);
+    forecast.value = 10 + (expected - 10) / 2;
+    assert.equal(schema.research(f.payload), false, 'An additional halving must be rejected');
+  }
+  const f = historyScenario('SHORT', 'atlas_pulse_monthly_history_gap_v2');
+  f.row.intrinsic_estimate = .1;
+  f.row.month_end_forecast.inputs.monthly_closes.forEach((row, index) => row.value = 100 * 1.75 ** index);
+  f.row.month_end_forecast.inputs.average_monthly_return = .75;
+  Object.assign(f.row.month_end_forecast, {status: 'unavailable', value: null, reason: 'nonpositive_projection'});
+  assert(schema.research(f.payload));
+  const overflow = historyScenario('SHORT', 'atlas_pulse_monthly_history_gap_v2');
+  overflow.row.price = 1e308; overflow.row.intrinsic_estimate = 5e307;
+  assert.equal(schema.research(overflow.payload), false, 'Non-finite arithmetic must be rejected before looping');
 });
 
 test('missing-history scenarios remain unavailable without an invented estimate', () => {

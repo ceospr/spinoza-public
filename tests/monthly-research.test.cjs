@@ -77,6 +77,51 @@ test('forecast contract rejects mismatched horizons, contradictory availability 
   }
 });
 
+function historyScenario(side = 'LONG') {
+  const f = fixture();
+  const dates = ['2025-12-31', '2026-01-30', '2026-02-27', '2026-03-31', '2026-04-30', '2026-05-29', '2026-06-30', '2026-07-31', '2026-08-31', '2026-09-30'];
+  const closes = dates.map((date, index) => ({date, value: 100 * 1.02 ** index}));
+  const mean = closes.slice(1).reduce((sum, row, index) => sum + row.value / closes[index].value - 1, 0) / 9;
+  f.row.intrinsic_estimate = side === 'LONG' ? 150 : 60;
+  const forecast = f.row.month_end_forecast;
+  forecast.model_version = 'atlas_pulse_monthly_history_gap_v1';
+  forecast.inputs = {average_monthly_return: mean, monthly_closes: closes, price_basis: 'split_adjusted_close'};
+  forecast.value = side === 'LONG' ? 120 + 30 * Math.abs(mean) * 120 : 120 - 2 * Math.abs(mean) * 120 * 120 / 100;
+  if (side === 'SHORT') {f.payload.longs = []; f.payload.shorts = [f.row];}
+  return f;
+}
+
+test('history projection binds the completed-month average and side-specific requested formula', () => {
+  for (const side of ['LONG', 'SHORT']) {
+    const f = historyScenario(side);
+    assert(schema.research(f.payload));
+    assert.equal(f.row.month_end_forecast.inputs.monthly_closes.length, 10);
+    if (side === 'LONG') assert(f.row.month_end_forecast.value > f.row.intrinsic_estimate, 'Requested arithmetic must not be silently capped at fair value');
+    for (const mutate of [
+      p => p.value += 1,
+      p => p.inputs.average_monthly_return *= -2,
+      p => p.inputs.monthly_closes.pop(),
+      p => p.inputs.monthly_closes[0].date = '2026-01-02',
+      p => p.inputs.monthly_closes[9].date = '2026-10-01',
+      p => p.inputs.monthly_closes[5].value = 0,
+      p => p.inputs.monthly_closes[5].private_debug = 'PRIVATE_CANARY',
+      p => p.reason = 'insufficient_history',
+    ]) {const changed = structuredClone(f.payload); mutate(changed[side === 'LONG' ? 'longs' : 'shorts'][0].month_end_forecast); assert.equal(schema.research(changed), false);}
+  }
+  const f = historyScenario('SHORT');
+  f.row.month_end_forecast.value = 120 - 2 * Math.abs(f.row.month_end_forecast.inputs.average_monthly_return) * 120;
+  assert.equal(schema.research(f.payload), false, 'Applying share price only once is not the requested short formula');
+});
+
+test('missing-history scenarios remain unavailable without an invented estimate', () => {
+  const f = historyScenario();
+  delete f.row.month_end_forecast.inputs;
+  Object.assign(f.row.month_end_forecast, {status: 'unavailable', value: null, reason: 'insufficient_history'});
+  assert(schema.research(f.payload));
+  f.row.month_end_forecast.value = 120;
+  assert.equal(schema.research(f.payload), false);
+});
+
 const tracker = () => ({schema_version: 'spinoza.public-research-performance.v1', status: 'published', updated_at_utc: '2026-10-02T20:00:00Z', methodology: 'Reconstructed gross research reference return. Separate from live account performance.',
   months: [{month: '2026-09', return_pct: 0.7224, start_date: '2026-09-08', end_date: '2026-09-30', status: 'final', methodology: 'Equal weight across 3 longs and 5 shorts; covers part of September.'}]});
 

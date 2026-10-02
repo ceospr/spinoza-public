@@ -91,12 +91,28 @@
       list(value.companies, row => keys(row, ["symbol", "name", "sector", "industry", "file", "sha256", "intrinsic_available", "relative_available", "income_available"]) && symbol(row.symbol) && [row.name, row.sector, row.industry].every(text) && row.file === `valuation-${row.symbol}.json` && hash(row.sha256) && [row.intrinsic_available, row.relative_available, row.income_available].every(item => typeof item === "boolean")) && unique(value.companies, "symbol");
   }
   function monthEndForecast(value) {
-    return keys(value, ["status", "value", "month", "as_of_utc", "model_version"], ["target_date", "methodology", "kind"]) &&
+    return keys(value, ["status", "value", "month", "as_of_utc", "model_version"], ["target_date", "methodology", "kind", "inputs", "reason"]) &&
       ["available", "unavailable"].includes(value.status) && (value.status === "available" ? finite(value.value) && value.value > 0 : value.value === null) &&
       month(value.month) && value.as_of_utc !== null && timestamp(value.as_of_utc) && text(value.model_version) && value.model_version.length > 0 &&
       (!Object.hasOwn(value, "target_date") || (day(value.target_date) && value.target_date.startsWith(value.month))) &&
       (!Object.hasOwn(value, "methodology") || text(value.methodology)) &&
-      (!Object.hasOwn(value, "kind") || ["conditional_projection", "model_forecast"].includes(value.kind));
+      (!Object.hasOwn(value, "kind") || ["conditional_projection", "model_forecast"].includes(value.kind)) &&
+      (!Object.hasOwn(value, "inputs") || monthlyProjectionInputs(value.inputs, value.month)) &&
+      (!Object.hasOwn(value, "reason") || ["insufficient_history", "nonpositive_projection"].includes(value.reason));
+  }
+  function monthlyProjectionInputs(value, projectionMonth) {
+    if (!keys(value, ["average_monthly_return", "monthly_closes", "price_basis"]) ||
+        !finite(value.average_monthly_return) || value.price_basis !== "split_adjusted_close" ||
+        !month(projectionMonth)) return false;
+    const year = Number(projectionMonth.slice(0, 4)), count = Number(projectionMonth.slice(5));
+    if (count < 2 || !Array.isArray(value.monthly_closes) || value.monthly_closes.length !== count) return false;
+    if (!value.monthly_closes.every((row, index) => {
+      const prefix = index === 0 ? `${year - 1}-12` : `${year}-${String(index).padStart(2, '0')}`;
+      return keys(row, ["date", "value"]) && day(row.date) && row.date.startsWith(prefix) && finite(row.value) && row.value > 0;
+    })) return false;
+    const changes = value.monthly_closes.slice(1).map((row, index) => row.value / value.monthly_closes[index].value - 1);
+    const average = changes.reduce((sum, value) => sum + value, 0) / changes.length;
+    return Number.isFinite(average) && Math.abs(average - value.average_monthly_return) <= 1e-12;
   }
   function candidate(value) {
     return keys(value, ["symbol", "name", "sector", "currency", "price", "price_date", "intrinsic_estimate", "report_sha256"], ["month_end_forecast"]) && symbol(value.symbol) && currency(value.currency) && text(value.name) && text(value.sector) && finite(value.price) && value.price > 0 && day(value.price_date) && finite(value.intrinsic_estimate) && hash(value.report_sha256) && (!Object.hasOwn(value, "month_end_forecast") || monthEndForecast(value.month_end_forecast));
@@ -106,18 +122,31 @@
     const part = type => parts.find(item => item.type === type).value;
     return `${part('year')}-${part('month')}-${part('day')}`;
   }
-  function forecastMatchesPublication(row, publication) {
+  function forecastMatchesPublication(row, publication, side) {
     const forecast = row.month_end_forecast;
     if (!forecast) return true;
     if (publication.published_at_utc === null) return false;
     const publishedDate = marketDate(publication.published_at_utc), observedDate = marketDate(forecast.as_of_utc);
+    if (forecast.model_version === 'atlas_pulse_monthly_history_gap_v1') {
+      if (forecast.kind !== 'conditional_projection' || !forecast.target_date || row.intrinsic_estimate <= 0) return false;
+      if (!forecast.inputs) {
+        if (forecast.status !== 'unavailable' || forecast.reason !== 'insufficient_history') return false;
+      } else {
+        const m = Math.abs(forecast.inputs.average_monthly_return), p = row.price, v = row.intrinsic_estimate;
+        const projected = side === 'LONG' ? p + (v - p) * m * p : p - (p / v) * m * p * p / 100;
+        if (!Number.isFinite(projected)) return false;
+        if (projected <= 0) {
+          if (forecast.status !== 'unavailable' || forecast.reason !== 'nonpositive_projection') return false;
+        } else if (forecast.status !== 'available' || Object.hasOwn(forecast, 'reason') || Math.abs(forecast.value - projected) > 1e-10 * Math.max(1, Math.abs(projected))) return false;
+      }
+    }
     return forecast.month === publishedDate.slice(0, 7) && forecast.month === observedDate.slice(0, 7) &&
       Date.parse(forecast.as_of_utc) <= Date.parse(publication.published_at_utc) &&
       (!forecast.target_date || forecast.target_date > observedDate);
   }
   function research(value) {
     return keys(value, ["schema_version", "research_only", "published_at_utc", "valid_until_utc", "status", "longs", "shorts"]) && value.schema_version === "spinoza.public-research.v1" && value.research_only === true && timestamp(value.published_at_utc) && timestamp(value.valid_until_utc) && ["published", "unavailable"].includes(value.status) && list(value.longs, candidate) && list(value.shorts, candidate) && unique([...value.longs, ...value.shorts], "symbol") &&
-      [...value.longs, ...value.shorts].every(row => forecastMatchesPublication(row, value)) &&
+      value.longs.every(row => forecastMatchesPublication(row, value, 'LONG')) && value.shorts.every(row => forecastMatchesPublication(row, value, 'SHORT')) &&
       (value.status !== "published" || (value.published_at_utc !== null && value.valid_until_utc !== null && Date.parse(value.valid_until_utc) >= Date.parse(value.published_at_utc) && value.longs.length + value.shorts.length > 0));
   }
   function tracker(value) {

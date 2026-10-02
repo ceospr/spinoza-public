@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="valuation.css?v=forward-v2-20260929">
   <script defer src="public-schema.js?v=forward-v2-20260929"></script>
-  <script defer src="valuation.js?v=forward-v2-20260929"></script>
+  <script defer src="valuation.js?v=monthly-fair-value-20261002"></script>
 </head>
 <body class="valuation-page">
   <a class="ev-skip" href="#company-search">Skip to company search</a>
@@ -44,7 +44,7 @@
           <label for="sector-filter">Sector</label>
           <select id="sector-filter"><option value="">All sectors</option></select>
           <label for="basis-filter">Analysis available</label>
-          <select id="basis-filter"><option value="">All companies</option><option value="intrinsic">Intrinsic estimate</option><option value="relative">Relative comparison</option><option value="income">Income scenario</option><option value="unavailable">Estimate unavailable</option></select>
+          <select id="basis-filter"><option value="">All companies</option><option value="intrinsic">Fair value</option><option value="relative">Relative comparison</option><option value="income">Income scenario</option><option value="unavailable">Estimate unavailable</option></select>
         </form>
         <p id="search-status" class="ev-caption" role="status">Loading companies…</p>
         <ul id="company-results" class="ev-company-list" aria-label="Search results"></ul>
@@ -60,7 +60,7 @@
       <h2>Evidence first. Estimates in context.</h2>
       <div class="ev-method-grid">
         <div><h3>Conditional estimates</h3><p>Values depend on the financial period, forecast assumptions and valuation method shown in the report. Scenario ranges are not statistical confidence intervals. Archived reports retain their original model.</p></div>
-        <div><h3>Separate estimate types</h3><p>Intrinsic equity estimates, relative pricing comparisons and income scenarios answer different questions. An income scenario does not establish total equity value or property NAV.</p></div>
+        <div><h3>Separate estimate types</h3><p>Fair value estimates, relative pricing comparisons and income scenarios answer different questions. An income scenario does not establish total equity value or property NAV.</p></div>
         <div><h3>Unavailable estimates</h3><p>An unavailable estimate means no supported result is published for that measure. It does not mean the business has no value.</p></div>
       </div>
     </section>

@@ -36,11 +36,10 @@ test('October projection is separate from intrinsic value and keeps its source a
   assert.match(cells[1].textContent, /\$130\.00/);
   assert.match(cells[2].textContent, /\$180\.00/);
   assert.match(cells[3].textContent, /\$122\.50/);
-  assert.match(cells[3].textContent, /October 2026.*2026-10-30/);
-  assert.match(cells[3].textContent, /conditional projection/);
+  assert.doesNotMatch(cells[3].textContent, /October 2026|2026-10-30|conditional projection|As of/);
   assert.doesNotMatch(cells[3].textContent, /atlas_pulse_gap_twelfth_v1/);
   assert.doesNotMatch(cells[3].textContent, /One twelfth/);
-  assert.match(document.getElementById('research_candidates_projection_methodology').textContent, /One twelfth/);
+  assert.equal(document.getElementById('research_candidates_projection_methodology').textContent, 'Projection: One twelfth of the value gap; a conditional scenario.');
   assert.match(cells[3].textContent, /Projection baseline \$120\.00/);
   assert.match(cells[3].textContent, /retains the selection report assumptions/);
   assert.equal(document.getElementById('research_candidates_short_body').children[0].children[0].colSpan, 4);
@@ -81,15 +80,15 @@ test('forecast contract rejects mismatched horizons, contradictory availability 
 const tracker = () => ({schema_version: 'spinoza.public-research-performance.v1', status: 'published', updated_at_utc: '2026-10-02T20:00:00Z', methodology: 'Reconstructed gross research reference return. Separate from live account performance.',
   months: [{month: '2026-09', return_pct: 0.7224, start_date: '2026-09-08', end_date: '2026-09-30', status: 'final', methodology: 'Equal weight across 3 longs and 5 shorts; covers part of September.'}]});
 
-test('September return displays actual partial-month dates and reconstruction method', async () => {
+test('September return displays its actual period without repeated methodology paragraphs', async () => {
   const payload = tracker(), document = documentMock(); assert(schema.tracker(payload));
   await returns.refresh({fetchImpl: async () => ({ok: true, json: async () => payload}), document});
   const body = document.getElementById('research_return_body');
   assert.match(body.textContent, /September 2026/);
   assert.match(body.textContent, /2026-09-08 to 2026-09-30/);
   assert.match(body.textContent, /\+0\.72%/);
-  assert.match(body.textContent, /covers part of September/);
-  assert.match(document.getElementById('atlas_tracker_methodology').textContent, /Reconstructed/);
+  assert.doesNotMatch(body.textContent, /covers part of September|Reconstructed|Equal weight/);
+  assert.equal(document.getElementById('atlas_tracker_methodology').textContent, '');
   assert.match(document.getElementById('atlas_tracker_updated').textContent, /Pacific/);
 });
 

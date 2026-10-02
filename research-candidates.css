@@ -22,7 +22,7 @@
   .candidate-table tbody{display:block}.candidate-table tbody tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
   .candidate-table td{display:block;min-width:0;border-top:0;padding:10px 12px}.candidate-table td:first-child{grid-column:1/-1;padding-bottom:0}
   .candidate-table td:nth-child(2)::before,.candidate-table td:nth-child(3)::before,.candidate-table td:nth-child(4)::before{display:block;font-size:10px;color:var(--muted);font-weight:600;margin-bottom:5px}
-  .candidate-table td:nth-child(2)::before{content:'Recorded price'}.candidate-table td:nth-child(3)::before{content:'Intrinsic estimate'}.candidate-table td:nth-child(4)::before{content:'Atlas Pulse month-end projection'}
+  .candidate-table td:nth-child(2)::before{content:'Recorded price'}.candidate-table td:nth-child(3)::before{content:'Fair value'}.candidate-table td:nth-child(4)::before{content:'Month-end projection'}
   .candidate-table td:nth-child(4){grid-column:1/-1}
   .candidate-observation{white-space:normal}.candidate-valuation-note{overflow-wrap:anywhere}
 }

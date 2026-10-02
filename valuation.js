@@ -77,7 +77,7 @@ if (typeof document !== 'undefined') (async () => {
     const list = $('company-results'); list.replaceChildren();
     for (const row of rows.slice(0, shown)) {
       const li = el('li'), button = el('button', undefined, 'ev-company-button'); button.type = 'button'; button.setAttribute('aria-current', String(row.symbol === selected));
-      button.append(el('span', row.symbol, 'ev-company-symbol'), el('span', row.name, 'ev-company-name'), el('span', row.intrinsic_available ? 'Intrinsic estimate available' : row.income_available ? 'Income scenario available' : row.relative_available ? 'Relative estimate available' : 'Estimate unavailable', 'ev-company-status'));
+      button.append(el('span', row.symbol, 'ev-company-symbol'), el('span', row.name, 'ev-company-name'), el('span', row.intrinsic_available ? 'Fair value available' : row.income_available ? 'Income scenario available' : row.relative_available ? 'Relative estimate available' : 'Estimate unavailable', 'ev-company-status'));
       button.addEventListener('click', () => selectCompany(row, true)); li.appendChild(button); list.appendChild(li);
     }
     $('more-results').hidden = rows.length <= shown;
@@ -93,9 +93,9 @@ if (typeof document !== 'undefined') (async () => {
     const values = el('dl', undefined, 'ev-kpis');
     function kpi(title, value, note) {const item = el('div', undefined, 'ev-kpi'); item.append(el('dt', title), el('dd', value), el('small', note)); values.appendChild(item);}
     kpi('Recorded closing price', E.money(report.quote.value, report.currency), `${report.currency} · ${report.quote.date || 'Date unavailable'} · not live`);
-    kpi(report.analysis ? 'Base intrinsic estimate per share' : 'Intrinsic estimate per share', E.money(report.estimates.intrinsic.value, report.currency), report.analysis ? report.analysis.model_name : 'Conditional equity estimate · archived model');
-    kpi('Relative estimate per share', E.money(report.estimates.relative.value, report.currency), 'A pricing comparison; separate from intrinsic value');
-    if (report.estimates.income.status === 'available') kpi('Income scenario per share', E.money(report.estimates.income.value, report.currency), 'Separate from intrinsic equity value or property NAV');
+    kpi(report.analysis ? 'Base fair value per share' : 'Fair value per share', E.money(report.estimates.intrinsic.value, report.currency), report.analysis ? report.analysis.model_name : 'Conditional equity estimate · archived model');
+    kpi('Relative estimate per share', E.money(report.estimates.relative.value, report.currency), 'A pricing comparison; separate from fair value');
+    if (report.estimates.income.status === 'available') kpi('Income scenario per share', E.money(report.estimates.income.value, report.currency), 'Separate from fair value or property NAV');
     heading.appendChild(values);
     const actions = el('div', undefined, 'ev-actions');
     if (E.secUrl(report.sec_filings_url)) {const link = el('a', 'View SEC filings ↗', 'ev-action'); link.href = report.sec_filings_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; actions.appendChild(link);}

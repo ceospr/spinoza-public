@@ -7,7 +7,6 @@
   'use strict';
   const schema = typeof module === 'object' && module.exports ? require('./public-schema.js') : globalThis.PublicSchema;
   const money = (value, currency) => typeof value === 'number' && Number.isFinite(value) ? new Intl.NumberFormat('en-US', {style: 'currency', currency, maximumFractionDigits: 2}).format(value) : 'Unavailable';
-  const monthName = value => new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(value + '-01T00:00:00Z'));
   async function resolveReports(payload, {fetchImpl = globalThis.fetch, cryptoImpl = globalThis.crypto} = {}) {
     const selected = [...payload.longs, ...payload.shorts], resolved = new Map();
     let index;
@@ -46,7 +45,7 @@
     const archived = available && now.getTime() >= Date.parse(payload.valid_until_utc);
     const methods = new Set(available ? [...payload.longs, ...payload.shorts].map(row => row.month_end_forecast?.methodology).filter(Boolean) : []);
     const sharedMethod = methods.size === 1 ? [...methods][0] : '';
-    text('research_candidates_projection_methodology', sharedMethod ? 'Atlas Pulse projection: ' + sharedMethod : '');
+    text('research_candidates_projection_methodology', sharedMethod ? 'Projection: ' + sharedMethod : '');
     text('research_candidates_status', !available ? 'Research publication unavailable' : archived ? 'Archived selection' : 'Published research');
     text('research_candidates_date', available ? `Selection published ${payload.published_at_utc.slice(0, 10)} · Qualification ${archived ? 'expired' : 'valid until'} ${new Date(payload.valid_until_utc).toLocaleString()}. Values come from current published company reports; updating a value does not requalify this selection.` : 'A new research publication will appear here when available.');
     for (const side of ['long', 'short']) {
@@ -70,10 +69,6 @@
         const forecastVisible = Boolean(report) && forecast?.status === 'available' && Date.parse(forecast.as_of_utc) <= now.getTime();
         const projection = el('td', money(forecastVisible ? forecast.value : null, row.currency));
         if (forecast) {
-          const label = forecast.kind === 'model_forecast' ? 'Atlas Pulse forecast' : 'Atlas Pulse conditional projection';
-          projection.appendChild(el('small', monthName(forecast.month) + (forecast.target_date ? ' · target ' + forecast.target_date : ' month end'), 'candidate-valuation-note'));
-          projection.appendChild(el('small', label, 'candidate-valuation-note'));
-          projection.appendChild(el('small', 'As of ' + forecast.as_of_utc.slice(0, 10), 'candidate-valuation-note'));
           if (forecast.methodology && !sharedMethod) projection.appendChild(el('small', forecast.methodology, 'candidate-valuation-note'));
           if (report && (row.price !== report.quote.value || row.price_date !== report.quote.date)) projection.appendChild(el('small', 'Projection baseline ' + money(row.price, row.currency) + ' · ' + row.price_date, 'candidate-valuation-note'));
           if (canonical?.selection_report_changed) projection.appendChild(el('small', 'Projection retains the selection report assumptions.', 'candidate-valuation-note'));

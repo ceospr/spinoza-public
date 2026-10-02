@@ -1,4 +1,4 @@
-/* Published aggregate research performance, with its measurement period and method. */
+/* Published aggregate research performance with its measurement period. */
 (function (root, factory) {
   const api = factory(typeof module === 'object' && module.exports ? require('./public-schema.js') : root.PublicSchema);
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -14,14 +14,12 @@
     body.replaceChildren();
     setText('atlas_tracker_status', rows.length ? 'Published monthly research reference returns.' : 'Research returns are currently unavailable.');
     setText('atlas_tracker_updated', payload?.updated_at_utc ? 'As of ' + new Intl.DateTimeFormat('en-US', {dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Los_Angeles'}).format(new Date(payload.updated_at_utc)) + ' Pacific' : '');
-    setText('atlas_tracker_methodology', payload?.methodology || 'Aggregate research returns are separate from live account performance.');
     for (const row of rows) {
       const tr = document.createElement('tr');
       const month = el('td', new Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(row.month + '-01T00:00:00Z')));
       if (row.start_date && row.end_date) month.appendChild(el('small', row.start_date + ' to ' + row.end_date, 'candidate-valuation-note'));
       if (row.status === 'month_to_date') month.appendChild(el('small', 'Month to date', 'candidate-valuation-note'));
       const result = el('td', (row.return_pct > 0 ? '+' : '') + row.return_pct.toFixed(2) + '%');
-      if (row.methodology && row.methodology !== payload.methodology) result.appendChild(el('small', row.methodology, 'research-return-methodology'));
       tr.append(month, result); body.appendChild(tr);
     }
     if (!rows.length) {const tr = document.createElement('tr'), td = el('td', 'No aggregate research return is currently published.', 'empty'); td.colSpan = 2; tr.appendChild(td); body.appendChild(tr);}

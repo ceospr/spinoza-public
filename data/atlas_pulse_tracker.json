@@ -1,6 +1,16 @@
 {
-  "months": [],
+  "methodology": "Gross research reference returns, equal weighted across the original published names. Entry is the first completed session close after publication; exit is the last completed session of the stated period. Split-adjusted closes plus cash distributions; distributions reduce short returns. Excludes commissions, slippage, financing and borrow costs. These are fixed-cohort reference calculations, separate from live account performance.",
+  "months": [
+    {
+      "end_date": "2026-09-30",
+      "methodology": "Reconstructed after the period. 8 original names, equal weight per name. 2026-09-08 close through 2026-09-30 close. Gross research reference returns, equal weighted across the original published names. Entry is the first completed session close after publication; exit is the last completed session of the stated period. Split-adjusted closes plus cash distributions; distributions reduce short returns. Excludes commissions, slippage, financing and borrow costs. These are fixed-cohort reference calculations, separate from live account performance.",
+      "month": "2026-09",
+      "return_pct": 0.7224,
+      "start_date": "2026-09-08",
+      "status": "final"
+    }
+  ],
   "schema_version": "spinoza.public-research-performance.v1",
-  "status": "unavailable",
-  "updated_at_utc": "2026-09-08T03:39:07Z"
+  "status": "published",
+  "updated_at_utc": "2026-10-02T20:44:19.947209Z"
 }

@@ -39,10 +39,15 @@ test('October projection is separate from intrinsic value and keeps its source a
   assert.doesNotMatch(cells[3].textContent, /October 2026|2026-10-30|conditional projection|As of/);
   assert.doesNotMatch(cells[3].textContent, /atlas_pulse_gap_twelfth_v1/);
   assert.doesNotMatch(cells[3].textContent, /One twelfth/);
-  assert.equal(document.getElementById('research_candidates_projection_methodology').textContent, 'Projection: One twelfth of the value gap; a conditional scenario.');
+  assert.equal(document.getElementById('research_candidates_projection_methodology').textContent, '');
   assert.match(cells[3].textContent, /Projection baseline \$120\.00/);
   assert.match(cells[3].textContent, /retains the selection report assumptions/);
   assert.equal(document.getElementById('research_candidates_short_body').children[0].children[0].colSpan, 4);
+  f.payload.shorts = [{...structuredClone(f.row), symbol: 'OTHER'}];
+  f.payload.shorts[0].month_end_forecast.methodology = 'Distinct formula that must remain in the data only.';
+  candidates.render(f.payload, document, new Date('2026-10-03T00:00:00Z'), f.reports);
+  assert.doesNotMatch(document.getElementById('research_candidates_long_body').textContent, /One twelfth/);
+  assert.doesNotMatch(document.getElementById('research_candidates_short_body').textContent, /Distinct formula/);
 });
 
 test('missing, future and unverified projections never fall back to intrinsic or candidate estimates', () => {

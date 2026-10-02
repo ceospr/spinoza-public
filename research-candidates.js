@@ -43,9 +43,6 @@
     const el = (tag, value, cls) => {const node = document.createElement(tag); if (value !== undefined) node.textContent = value; if (cls) node.className = cls; return node;};
     const available = payload?.status === 'published' && Date.parse(payload.published_at_utc) <= now.getTime();
     const archived = available && now.getTime() >= Date.parse(payload.valid_until_utc);
-    const methods = new Set(available ? [...payload.longs, ...payload.shorts].map(row => row.month_end_forecast?.methodology).filter(Boolean) : []);
-    const sharedMethod = methods.size === 1 ? [...methods][0] : '';
-    text('research_candidates_projection_methodology', sharedMethod ? 'Projection: ' + sharedMethod : '');
     text('research_candidates_status', !available ? 'Research publication unavailable' : archived ? 'Archived selection' : 'Published research');
     text('research_candidates_date', available ? `Selection published ${payload.published_at_utc.slice(0, 10)} · Qualification ${archived ? 'expired' : 'valid until'} ${new Date(payload.valid_until_utc).toLocaleString()}. Values come from current published company reports; updating a value does not requalify this selection.` : 'A new research publication will appear here when available.');
     for (const side of ['long', 'short']) {
@@ -69,7 +66,6 @@
         const forecastVisible = Boolean(report) && forecast?.status === 'available' && Date.parse(forecast.as_of_utc) <= now.getTime();
         const projection = el('td', money(forecastVisible ? forecast.value : null, row.currency));
         if (forecast) {
-          if (forecast.methodology && !sharedMethod) projection.appendChild(el('small', forecast.methodology, 'candidate-valuation-note'));
           if (report && (row.price !== report.quote.value || row.price_date !== report.quote.date)) projection.appendChild(el('small', 'Projection baseline ' + money(row.price, row.currency) + ' · ' + row.price_date, 'candidate-valuation-note'));
           if (canonical?.selection_report_changed) projection.appendChild(el('small', 'Projection retains the selection report assumptions.', 'candidate-valuation-note'));
           if (!report) projection.appendChild(el('small', 'Current company report could not be verified.', 'candidate-valuation-note'));

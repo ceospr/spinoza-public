@@ -32,6 +32,18 @@ const documentMock = () => {
 test('every public data file matches an approved display schema', () => {
   assert(S.valuationIndex(index));
   const expected = new Set(['valuation-index.json', 'research-candidates.json', 'atlas_pulse_tracker.json', 'public_dashboard.json', 'public_dashboard_large.json', 'research.json', ...index.companies.map(row => row.file)]);
+  if (fs.existsSync(path.join(root, 'data', 'valuation-fallbacks.json'))) {
+    expected.add('valuation-fallbacks.json');
+    const fallbacks = data('valuation-fallbacks.json');
+    assert(S.valuationFallbacks(fallbacks));
+    const indexHash = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'data', 'valuation-index.json'))).digest('hex');
+    const resolved = valuation.fallbackRows(fallbacks, index, indexHash, Date.parse(fallbacks.generated_at_utc));
+    assert.equal(resolved.size, fallbacks.companies.length);
+    for (const row of fallbacks.companies) {
+      const report = data(index.companies.find(entry => entry.symbol === row.symbol).file);
+      assert.equal(valuation.fairValue(report, resolved, Date.parse(fallbacks.generated_at_utc)).value, row.value);
+    }
+  }
   assert.deepEqual(new Set(fs.readdirSync(path.join(root, 'data'))), expected);
   for (const row of index.companies) {
     const bytes = fs.readFileSync(path.join(root, 'data', row.file));

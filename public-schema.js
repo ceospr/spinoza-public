@@ -90,6 +90,20 @@
     return keys(value, ["schema_version", "generated_at_utc", "companies"]) && value.schema_version === "spinoza.public-valuation-index.v1" && timestamp(value.generated_at_utc) &&
       list(value.companies, row => keys(row, ["symbol", "name", "sector", "industry", "file", "sha256", "intrinsic_available", "relative_available", "income_available"]) && symbol(row.symbol) && [row.name, row.sector, row.industry].every(text) && row.file === `valuation-${row.symbol}.json` && hash(row.sha256) && [row.intrinsic_available, row.relative_available, row.income_available].every(item => typeof item === "boolean")) && unique(value.companies, "symbol");
   }
+  function valuationFallbacks(value) {
+    if (!keys(value, ['schema_version', 'model_version', 'valuation_basis', 'currency', 'generated_at_utc', 'benchmark_as_of_date', 'expires_at_utc', 'source_index_sha256', 'benchmark_sha256', 'donor_count', 'companies']) ||
+        value.schema_version !== 'spinoza.public-valuation-fallbacks.v1' || value.model_version !== 'atlas_average_intrinsic_gap_v1' ||
+        value.valuation_basis !== 'average_gap_fallback' || value.currency !== 'USD' || !day(value.benchmark_as_of_date) ||
+        !value.generated_at_utc || !timestamp(value.generated_at_utc) || !value.expires_at_utc || !timestamp(value.expires_at_utc) ||
+        !hash(value.source_index_sha256) || !hash(value.benchmark_sha256) || !Number.isSafeInteger(value.donor_count) || value.donor_count < 100 || value.donor_count > 10000) return false;
+    const generated = Date.parse(value.generated_at_utc), expires = Date.parse(value.expires_at_utc);
+    const lastDate = new Date(Date.parse(value.benchmark_as_of_date + 'T00:00:00Z') + 35 * 86400000).toISOString().slice(0, 10);
+    return generated >= Date.parse(value.benchmark_as_of_date + 'T00:00:00Z') && generated <= expires &&
+      value.expires_at_utc === lastDate + 'T23:59:59Z' && list(value.companies, row =>
+        keys(row, ['symbol', 'value', 'recorded_price', 'quote_date', 'as_of_utc', 'report_sha256']) && symbol(row.symbol) &&
+        finite(row.value) && row.value > 0 && finite(row.recorded_price) && row.recorded_price > 0 && row.quote_date === value.benchmark_as_of_date &&
+        row.as_of_utc !== null && timestamp(row.as_of_utc) && Date.parse(row.as_of_utc) <= generated && hash(row.report_sha256)) && unique(value.companies, 'symbol');
+  }
   function monthEndForecast(value) {
     return keys(value, ["status", "value", "month", "as_of_utc", "model_version"], ["target_date", "methodology", "kind", "inputs", "reason"]) &&
       ["available", "unavailable"].includes(value.status) && (value.status === "available" ? finite(value.value) && value.value > 0 : value.value === null) &&
@@ -161,5 +175,5 @@
         (!row.start_date || !row.end_date || row.start_date <= row.end_date) && (!row.end_date || row.end_date.startsWith(row.month)) &&
         (!Object.hasOwn(row, "methodology") || text(row.methodology)) && (!Object.hasOwn(row, "status") || ["final", "month_to_date"].includes(row.status))) && unique(value.months, "month");
   }
-  return Object.freeze({dashboard, valuation, valuationIndex, research, tracker, secUrl});
+  return Object.freeze({dashboard, valuation, valuationIndex, valuationFallbacks, research, tracker, secUrl});
 });

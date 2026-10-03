@@ -4,9 +4,30 @@ const EquityValuation = (() => {
   const schema = typeof module === 'object' && module.exports ? require('./public-schema.js') : globalThis.PublicSchema;
   const money = (value, currency) => typeof value === 'number' && Number.isFinite(value) ? new Intl.NumberFormat('en-US', {style: 'currency', currency, maximumFractionDigits: 2}).format(value) : 'Unavailable';
   const normalize = value => String(value || '').trim().toUpperCase();
-  function filter(companies, query, sector = '', basis = '') {
+  const freshFallback = (row, now = Date.now()) => row && Date.parse(row.generated_at_utc) <= now && now <= Date.parse(row.expires_at_utc);
+  function fallbackRows(payload, index, indexHash, now = Date.now()) {
+    if (!schema.valuationFallbacks(payload) || payload.source_index_sha256 !== indexHash || !freshFallback(payload, now)) return new Map();
+    const entries = new Map(index.companies.map(row => [row.symbol, row]));
+    if (payload.companies.some(row => !entries.has(row.symbol) || entries.get(row.symbol).intrinsic_available || entries.get(row.symbol).sha256 !== row.report_sha256)) return new Map();
+    return new Map(payload.companies.map(row => [row.symbol, {...row, generated_at_utc: payload.generated_at_utc, expires_at_utc: payload.expires_at_utc, benchmark_as_of_date: payload.benchmark_as_of_date}]));
+  }
+  function fairValue(report, fallbacks = new Map(), now = Date.now()) {
+    if (report.estimates.intrinsic.status === 'available') return {value: report.estimates.intrinsic.value,
+      title: report.analysis ? 'Base fair value per share' : 'Fair value per share',
+      note: report.analysis ? report.analysis.model_name : 'Conditional equity estimate · archived model', fallback: false};
+    const row = fallbacks.get(report.symbol);
+    if (freshFallback(row, now) && report.currency === 'USD' && row.recorded_price === report.quote.value &&
+        row.quote_date === report.quote.date && row.as_of_utc === report.as_of_utc) return {
+      value: row.value, title: 'Fair value per share — fallback', note: 'Average-gap estimate · benchmark ' + row.benchmark_as_of_date, fallback: true};
+    return {value: null, title: 'Fair value per share', note: 'No supported estimate currently published', fallback: false};
+  }
+  function filter(companies, query, sector = '', basis = '', fallbacks = new Map(), now = Date.now()) {
     const q = normalize(query);
-    return companies.filter(row => (!q || row.symbol.includes(q) || row.name.toUpperCase().includes(q)) && (!sector || row.sector === sector) && (!basis || (basis === 'unavailable' ? !row.intrinsic_available && !row.relative_available && !row.income_available : row[basis + '_available'])));
+    return companies.filter(row => {
+      const fallback = freshFallback(fallbacks.get(row.symbol), now);
+      const available = !basis || (basis === 'fair_value' ? row.intrinsic_available || fallback : basis === 'fallback' ? fallback : basis === 'unavailable' ? !row.intrinsic_available && !row.relative_available && !row.income_available && !fallback : row[basis + '_available']);
+      return (!q || row.symbol.includes(q) || row.name.toUpperCase().includes(q)) && (!sector || row.sector === sector) && available;
+    });
   }
   function validateReport(report, entry, expectedHash = null) {
     if (!schema.valuation(report) || report.symbol !== entry.symbol) throw Error('The published report does not match this company.');
@@ -56,7 +77,7 @@ const EquityValuation = (() => {
     market.append(facts(model.market_implied.requirements), el('p', model.market_implied.note, 'ev-caption'));
     return [scenarios, evidence, market];
   }
-  return Object.freeze({money, normalize, filter, validateReport, formatFact, renderForwardAnalysis, secUrl: schema.secUrl});
+  return Object.freeze({money, normalize, filter, fallbackRows, fairValue, freshFallback, validateReport, formatFact, renderForwardAnalysis, secUrl: schema.secUrl});
 })();
 if (typeof module === 'object' && module.exports) module.exports = EquityValuation;
 
@@ -65,19 +86,19 @@ if (typeof document !== 'undefined') (async () => {
   const E = EquityValuation, $ = id => document.getElementById(id);
   const el = (tag, content, cls) => {const node = document.createElement(tag); if (content !== undefined) node.textContent = content; if (cls) node.className = cls; return node;};
   const panel = $('report-panel'), params = new URLSearchParams(location.search);
-  let index, selected, shown = 30, sequence = 0, controller;
+  let index, selected, shown = 30, sequence = 0, controller, fallbacks = new Map();
   const cache = new Map();
   $('company-search').value = (params.get('q') || params.get('symbol') || '').slice(0, 100);
   $('year').textContent = String(new Date().getFullYear());
 
   function renderResults() {
     if (!index) return [];
-    const rows = E.filter(index.companies, $('company-search').value, $('sector-filter').value, $('basis-filter').value);
+    const rows = E.filter(index.companies, $('company-search').value, $('sector-filter').value, $('basis-filter').value, fallbacks);
     $('search-status').textContent = `${rows.length} ${rows.length === 1 ? 'company' : 'companies'} found`;
     const list = $('company-results'); list.replaceChildren();
     for (const row of rows.slice(0, shown)) {
       const li = el('li'), button = el('button', undefined, 'ev-company-button'); button.type = 'button'; button.setAttribute('aria-current', String(row.symbol === selected));
-      button.append(el('span', row.symbol, 'ev-company-symbol'), el('span', row.name, 'ev-company-name'), el('span', row.intrinsic_available ? 'Fair value available' : row.income_available ? 'Income scenario available' : row.relative_available ? 'Relative estimate available' : 'Estimate unavailable', 'ev-company-status'));
+      button.append(el('span', row.symbol, 'ev-company-symbol'), el('span', row.name, 'ev-company-name'), el('span', row.intrinsic_available ? 'Fair value available' : E.freshFallback(fallbacks.get(row.symbol)) ? 'Average-gap estimate available' : row.income_available ? 'Income scenario available' : row.relative_available ? 'Relative estimate available' : 'Estimate unavailable', 'ev-company-status'));
       button.addEventListener('click', () => selectCompany(row, true)); li.appendChild(button); list.appendChild(li);
     }
     $('more-results').hidden = rows.length <= shown;
@@ -93,7 +114,8 @@ if (typeof document !== 'undefined') (async () => {
     const values = el('dl', undefined, 'ev-kpis');
     function kpi(title, value, note) {const item = el('div', undefined, 'ev-kpi'); item.append(el('dt', title), el('dd', value), el('small', note)); values.appendChild(item);}
     kpi('Recorded closing price', E.money(report.quote.value, report.currency), `${report.currency} · ${report.quote.date || 'Date unavailable'} · not live`);
-    kpi(report.analysis ? 'Base fair value per share' : 'Fair value per share', E.money(report.estimates.intrinsic.value, report.currency), report.analysis ? report.analysis.model_name : 'Conditional equity estimate · archived model');
+    const fair = E.fairValue(report, fallbacks);
+    kpi(fair.title, E.money(fair.value, report.currency), fair.note);
     kpi('Relative estimate per share', E.money(report.estimates.relative.value, report.currency), 'A pricing comparison; separate from fair value');
     if (report.estimates.income.status === 'available') kpi('Income scenario per share', E.money(report.estimates.income.value, report.currency), 'Separate from fair value or property NAV');
     heading.appendChild(values);
@@ -135,7 +157,15 @@ if (typeof document !== 'undefined') (async () => {
   $('more-results').addEventListener('click', () => {shown += 30; renderResults();});
   try {
     const response = await fetch('data/valuation-index.json', {cache: 'no-cache'}); if (!response.ok) throw Error('The company index could not be loaded.');
-    index = await response.json(); if (!PublicSchema.valuationIndex(index)) throw Error('The published company index is invalid.');
+    const indexBytes = await response.arrayBuffer();
+    index = JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(indexBytes)); if (!PublicSchema.valuationIndex(index)) throw Error('The published company index is invalid.');
+    try {
+      if (globalThis.crypto?.subtle) {
+        const indexHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', indexBytes)), byte => byte.toString(16).padStart(2, '0')).join('');
+        const fallbackResponse = await fetch('data/valuation-fallbacks.json', {cache: 'no-cache'});
+        if (fallbackResponse.ok) fallbacks = E.fallbackRows(await fallbackResponse.json(), index, indexHash);
+      }
+    } catch (_) { fallbacks = new Map(); }
     $('release-summary').textContent = `${index.companies.length} companies · Published ${index.generated_at_utc ? new Date(index.generated_at_utc).toLocaleDateString() : 'date unavailable'}`;
     for (const sector of [...new Set(index.companies.map(row => row.sector))].filter(Boolean).sort()) {const option = el('option', sector); option.value = sector; $('sector-filter').appendChild(option);}
     const rows = renderResults(), query = $('company-search').value;

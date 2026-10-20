@@ -1,12 +1,12 @@
 {
   "schema_version": "spinoza.public-dashboard.v1",
-  "updated_at_utc": "2026-10-20T19:45:31Z",
+  "updated_at_utc": "2026-10-20T20:21:00Z",
   "performance": {
-    "since_inception_return_pct": -1.07,
-    "ytd_return_pct": -1.07,
-    "daily_return_pct": 0.62,
+    "since_inception_return_pct": -1.36,
+    "ytd_return_pct": -1.36,
+    "daily_return_pct": 0.32,
     "max_drawdown_pct": 21.02,
-    "win_rate_pct": 52.1
+    "win_rate_pct": 50.0
   },
   "monthly_performance": [
     {
@@ -19,7 +19,7 @@
     },
     {
       "month": "2026-10",
-      "return_pct": -3.05
+      "return_pct": -3.34
     }
   ],
   "performance_history": [
@@ -241,7 +241,7 @@
     },
     {
       "date": "2026-10-20",
-      "return_pct": -1.07
+      "return_pct": -1.36
     }
   ]
 }

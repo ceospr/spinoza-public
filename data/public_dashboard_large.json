@@ -1,10 +1,10 @@
 {
   "schema_version": "spinoza.public-dashboard.v1",
-  "updated_at_utc": "2026-10-21T15:45:29Z",
+  "updated_at_utc": "2026-10-21T16:00:31Z",
   "performance": {
     "since_inception_return_pct": 2.9,
     "ytd_return_pct": 2.9,
-    "daily_return_pct": 2.17,
+    "daily_return_pct": 2.18,
     "max_drawdown_pct": 21.02,
     "win_rate_pct": 50.7
   },

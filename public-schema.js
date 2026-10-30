@@ -136,6 +136,17 @@
     const part = type => parts.find(item => item.type === type).value;
     return `${part('year')}-${part('month')}-${part('day')}`;
   }
+  // Final XNYS close + 15 minutes, from the existing frozen 2024-2027 calendar.
+  const researchMonthCutoffs = Object.freeze({"2024-01":"2024-01-31T21:15:00Z","2024-02":"2024-02-29T21:15:00Z","2024-03":"2024-03-28T20:15:00Z","2024-04":"2024-04-30T20:15:00Z","2024-05":"2024-05-31T20:15:00Z","2024-06":"2024-06-28T20:15:00Z","2024-07":"2024-07-31T20:15:00Z","2024-08":"2024-08-30T20:15:00Z","2024-09":"2024-09-30T20:15:00Z","2024-10":"2024-10-31T20:15:00Z","2024-11":"2024-11-29T18:15:00Z","2024-12":"2024-12-31T21:15:00Z","2025-01":"2025-01-31T21:15:00Z","2025-02":"2025-02-28T21:15:00Z","2025-03":"2025-03-31T20:15:00Z","2025-04":"2025-04-30T20:15:00Z","2025-05":"2025-05-30T20:15:00Z","2025-06":"2025-06-30T20:15:00Z","2025-07":"2025-07-31T20:15:00Z","2025-08":"2025-08-29T20:15:00Z","2025-09":"2025-09-30T20:15:00Z","2025-10":"2025-10-31T20:15:00Z","2025-11":"2025-11-28T18:15:00Z","2025-12":"2025-12-31T21:15:00Z","2026-01":"2026-01-30T21:15:00Z","2026-02":"2026-02-27T21:15:00Z","2026-03":"2026-03-31T20:15:00Z","2026-04":"2026-04-30T20:15:00Z","2026-05":"2026-05-29T20:15:00Z","2026-06":"2026-06-30T20:15:00Z","2026-07":"2026-07-31T20:15:00Z","2026-08":"2026-08-31T20:15:00Z","2026-09":"2026-09-30T20:15:00Z","2026-10":"2026-10-30T20:15:00Z","2026-11":"2026-11-30T21:15:00Z","2026-12":"2026-12-31T21:15:00Z","2027-01":"2027-01-29T21:15:00Z","2027-02":"2027-02-26T21:15:00Z","2027-03":"2027-03-31T20:15:00Z","2027-04":"2027-04-30T20:15:00Z","2027-05":"2027-05-28T20:15:00Z","2027-06":"2027-06-30T20:15:00Z","2027-07":"2027-07-30T20:15:00Z","2027-08":"2027-08-31T20:15:00Z","2027-09":"2027-09-30T20:15:00Z","2027-10":"2027-10-29T20:15:00Z","2027-11":"2027-11-30T21:15:00Z","2027-12":"2027-12-31T21:15:00Z"});
+  function researchMonthMatches(target, timestampValue) {
+    if (!month(target) || !timestampValue || !timestamp(timestampValue)) return false;
+    const current = marketDate(timestampValue).slice(0, 7);
+    if (target === current) return true;
+    const [year, number] = current.split('-').map(Number);
+    const following = `${number === 12 ? year + 1 : year}-${String(number === 12 ? 1 : number + 1).padStart(2, '0')}`;
+    return target === following && Object.hasOwn(researchMonthCutoffs, current) &&
+      Date.parse(timestampValue) >= Date.parse(researchMonthCutoffs[current]);
+  }
   function forecastMatchesPublication(row, publication, side) {
     const forecast = row.month_end_forecast;
     if (!forecast) return true;
@@ -158,12 +169,12 @@
         } else if (forecast.status !== 'available' || Object.hasOwn(forecast, 'reason') || Math.abs(forecast.value - projected) > 1e-10 * Math.max(1, Math.abs(projected))) return false;
       }
     }
-    return forecast.month === publishedDate.slice(0, 7) && forecast.month === observedDate.slice(0, 7) &&
+    return forecast.month === (publication.month || publishedDate.slice(0, 7)) && (publication.month ? researchMonthMatches(forecast.month, forecast.as_of_utc) : forecast.month === observedDate.slice(0, 7)) &&
       Date.parse(forecast.as_of_utc) <= Date.parse(publication.published_at_utc) &&
       (!forecast.target_date || forecast.target_date > observedDate);
   }
   function research(value) {
-    return keys(value, ["schema_version", "research_only", "published_at_utc", "valid_until_utc", "status", "longs", "shorts"]) && value.schema_version === "spinoza.public-research.v1" && value.research_only === true && timestamp(value.published_at_utc) && timestamp(value.valid_until_utc) && ["published", "unavailable"].includes(value.status) && list(value.longs, candidate) && list(value.shorts, candidate) && unique([...value.longs, ...value.shorts], "symbol") &&
+    return keys(value, ["schema_version", "research_only", "published_at_utc", "valid_until_utc", "status", "longs", "shorts"], ["month"]) && (!Object.hasOwn(value, "month") || researchMonthMatches(value.month, value.published_at_utc)) && value.schema_version === "spinoza.public-research.v1" && value.research_only === true && timestamp(value.published_at_utc) && timestamp(value.valid_until_utc) && ["published", "unavailable"].includes(value.status) && list(value.longs, candidate) && list(value.shorts, candidate) && unique([...value.longs, ...value.shorts], "symbol") &&
       value.longs.every(row => forecastMatchesPublication(row, value, 'LONG')) && value.shorts.every(row => forecastMatchesPublication(row, value, 'SHORT')) &&
       (value.status !== "published" || (value.published_at_utc !== null && value.valid_until_utc !== null && Date.parse(value.valid_until_utc) >= Date.parse(value.published_at_utc) && value.longs.length + value.shorts.length > 0));
   }

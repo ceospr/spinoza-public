@@ -44,7 +44,9 @@
     const available = payload?.status === 'published' && Date.parse(payload.published_at_utc) <= now.getTime();
     const archived = available && now.getTime() >= Date.parse(payload.valid_until_utc);
     text('research_candidates_status', !available ? 'Research publication unavailable' : archived ? 'Archived selection' : 'Published research');
-    text('research_candidates_date', available ? `Selection published ${payload.published_at_utc.slice(0, 10)} · Qualification ${archived ? 'expired' : 'valid until'} ${new Date(payload.valid_until_utc).toLocaleString()}. Values come from current published company reports; updating a value does not requalify this selection.` : 'A new research publication will appear here when available.');
+    const researchMonth = payload?.month || (available ? payload.published_at_utc.slice(0, 7) : null);
+    const monthLabel = researchMonth ? new Date(researchMonth + '-15T12:00:00Z').toLocaleDateString('en-US', {month: 'long', year: 'numeric', timeZone: 'UTC'}) + ' research' : '';
+    text('research_candidates_date', available ? `${monthLabel} · Selection published ${payload.published_at_utc.slice(0, 10)} · Qualification ${archived ? 'expired' : 'valid until'} ${new Date(payload.valid_until_utc).toLocaleString()}. Values come from current published company reports; updating a value does not requalify this selection.` : 'A new research publication will appear here when available.');
     for (const side of ['long', 'short']) {
       const rows = available ? [...payload[side + 's']].sort((a, b) => a.symbol.localeCompare(b.symbol)) : [];
       text('research_candidates_' + side + '_count', rows.length ? rows.length + ' shown' : '');

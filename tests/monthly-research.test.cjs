@@ -161,6 +161,32 @@ test('missing-history scenarios remain unavailable without an invented estimate'
 const tracker = () => ({schema_version: 'spinoza.public-research-performance.v1', status: 'published', updated_at_utc: '2026-10-02T20:00:00Z', methodology: 'Reconstructed gross research reference return. Separate from live account performance.',
   months: [{month: '2026-09', return_pct: 0.7224, start_date: '2026-09-08', end_date: '2026-09-30', status: 'final', methodology: 'Equal weight across 3 longs and 5 shorts; covers part of September.'}]});
 
+test('November publication preserves October timestamps and labels the intended research month', () => {
+  const f = fixture(), document = documentMock();
+  Object.assign(f.payload, {month: '2026-11', published_at_utc: '2026-10-30T21:00:00Z', valid_until_utc: '2026-10-31T21:00:00Z'});
+  Object.assign(f.row.month_end_forecast, {month: '2026-11', target_date: '2026-11-30', as_of_utc: '2026-10-30T20:15:00Z'});
+  assert(schema.research(f.payload));
+  candidates.render(f.payload, document, new Date('2026-10-30T22:00:00Z'), f.reports);
+  assert.match(document.getElementById('research_candidates_date').textContent, /November 2026 research/);
+  assert.match(document.getElementById('research_candidates_date').textContent, /Selection published 2026-10-30/);
+  for (const mutate of [p => p.month = '2026-12', p => delete p.month,
+    p => p.published_at_utc = '2026-10-30T20:14:59Z',
+    p => p.longs[0].month_end_forecast.as_of_utc = '2026-10-30T20:14:59Z']) {
+    const copy = structuredClone(f.payload); mutate(copy); assert.equal(schema.research(copy), false);
+  }
+});
+
+test('next-month cutoff uses the exchange early close and year boundary', () => {
+  for (const [month, observed] of [['2024-12', '2024-11-29T18:15:00Z'], ['2027-01', '2026-12-31T21:15:00Z'], ['2027-06', '2027-05-28T20:15:00Z']]) {
+    const f = fixture();
+    delete f.row.month_end_forecast;
+    Object.assign(f.payload, {month, published_at_utc: observed, valid_until_utc: '2027-07-01T00:00:00Z'});
+    assert(schema.research(f.payload));
+    f.payload.published_at_utc = new Date(Date.parse(observed) - 1000).toISOString();
+    assert.equal(schema.research(f.payload), false);
+  }
+});
+
 test('September return displays its actual period without repeated methodology paragraphs', async () => {
   const payload = tracker(), document = documentMock(); assert(schema.tracker(payload));
   await returns.refresh({fetchImpl: async () => ({ok: true, json: async () => payload}), document});

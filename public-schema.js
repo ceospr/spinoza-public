@@ -32,15 +32,16 @@
     const metrics = ["since_inception_return_pct", "ytd_return_pct", "daily_return_pct", "max_drawdown_pct", "win_rate_pct"];
     const rootKeys = ["schema_version", "updated_at_utc", "performance", "monthly_performance", "performance_history"];
     const v2 = value?.schema_version === "spinoza.public-dashboard.v2";
-    if (!keys(value, v2 ? [...rootKeys, "trade_history", "open_positions"] : rootKeys) ||
+    if (!keys(value, v2 ? [...rootKeys, "trade_history", "open_positions"] : rootKeys, ["current_drawdown_at_utc"]) ||
+        (Object.hasOwn(value, "current_drawdown_at_utc") && !timestamp(value.current_drawdown_at_utc)) ||
         !["spinoza.public-dashboard.v1", "spinoza.public-dashboard.v2"].includes(value.schema_version) || !timestamp(value.updated_at_utc) ||
         !list(value.monthly_performance, row => period(row, "month", month)) || !unique(value.monthly_performance, "month") ||
         !list(value.performance_history, row => period(row, "date", day)) || !unique(value.performance_history, "date")) return false;
-    if (!v2) return keys(value.performance, [], metrics) && Object.values(value.performance).every(numeric);
+    if (!v2) return keys(value.performance, [], [...metrics, "current_drawdown_pct"]) && Object.values(value.performance).every(numeric);
     const countKeys = ["closed_trades_count", "winning_trades_count", "losing_trades_count", "breakeven_trades_count", "open_positions_count"];
     const performance = value.performance;
     const rounded = (value, digits) => finite(value) && value === Number(value.toFixed(digits));
-    if (!keys(performance, [...metrics, "profit_factor", ...countKeys]) || !Object.values(performance).every(numeric) ||
+    if (!keys(performance, [...metrics, "profit_factor", ...countKeys], ["current_drawdown_pct"]) || !Object.values(performance).every(numeric) ||
         [...metrics, "profit_factor"].some(key => performance[key] !== null && !rounded(performance[key], 2)) ||
         countKeys.some(key => performance[key] !== null && (!Number.isSafeInteger(performance[key]) || performance[key] < 0)) ||
         (performance.max_drawdown_pct !== null && performance.max_drawdown_pct < 0) ||

@@ -2,7 +2,13 @@
 (function (root, factory) {
   const api = factory(typeof module === "object" && module.exports ? require("./public-schema.js") : root.PublicSchema);
   if (typeof module === "object" && module.exports) module.exports = api;
-  else { root.SpinozaDashboard = api; document.addEventListener("DOMContentLoaded", () => api.refresh()); }
+  else {
+    root.SpinozaDashboard = api;
+    document.addEventListener("DOMContentLoaded", () => {
+      api.refresh();
+      setInterval(() => { if (!document.hidden) api.refresh({refreshResearch: false}); }, 60000);
+    });
+  }
 })(typeof globalThis !== "undefined" ? globalThis : this, function (schema) {
   "use strict";
   const finite = value => typeof value === "number" && Number.isFinite(value);
@@ -41,6 +47,8 @@
       text(key, percent(payload?.performance?.[key], !["max_drawdown_pct", "win_rate_pct"].includes(key)));
     }
     text("profit_factor", finite(payload?.performance?.profit_factor) ? payload.performance.profit_factor.toFixed(2) : "Unavailable");
+    const closeDate = payload?.current_drawdown_at_utc ? new Date(payload.current_drawdown_at_utc).toLocaleDateString("en-US", {timeZone: "America/New_York", month: "short", day: "numeric", year: "numeric"}) : null;
+    text("current_drawdown", `Current drawdown: ${percent(payload?.performance?.current_drawdown_pct, false)}${closeDate ? ` · Close ${closeDate}` : ""}`);
     for (const key of ["closed_trades_count", "winning_trades_count", "losing_trades_count", "breakeven_trades_count", "open_positions_count"]) text(key, count(payload?.performance?.[key]));
     table(document, "monthly_table_body", payload?.monthly_performance || [], [
       {value: row => row.month}, {value: row => percent(row.return_pct), className: row => returnClass(row.return_pct)}
@@ -64,7 +72,7 @@
     ], v2 ? "No positions are included in this snapshot." : "Position details are not available in this publication.");
     text("trade_records_status", v2 ? `${count(trades.length)} completed-trade records shown · most recent exits first` : "Trade details unavailable");
     text("position_records_status", v2 ? `${count(positions.length)} positions shown` : "Position details unavailable");
-    text("performance_status", payload ? "Published account performance. Results reflect the stated reporting date." : "Performance is temporarily unavailable. Please try again later.");
+    text("performance_status", payload ? "Published account performance. Maximum Drawdown uses daily closing equity since performance tracking began. Current drawdown updates after each market close." : "Performance is temporarily unavailable. Please try again later.");
     return payload;
   }
   function dataSource(document) {
@@ -73,7 +81,7 @@
     if (source === "review/dashboard.json") return source;
     throw new Error("Unsupported dashboard publication.");
   }
-  async function refresh({fetchImpl = globalThis.fetch, document = globalThis.document} = {}) {
+  async function refresh({fetchImpl = globalThis.fetch, document = globalThis.document, refreshResearch = true} = {}) {
     let payload = null;
     try {
       const source = dataSource(document);
@@ -85,7 +93,7 @@
     } catch (_) { /* Unverified or unavailable publications clear all displayed values. */ }
     render(payload, document);
     const year = document.getElementById("year"); if (year) year.textContent = String(new Date().getFullYear());
-    if (globalThis.renderResearchPreview) globalThis.renderResearchPreview("#research-preview", {limit: 3});
+    if (refreshResearch && globalThis.renderResearchPreview) globalThis.renderResearchPreview("#research-preview", {limit: 3});
     return payload;
   }
   return Object.freeze({render, refresh, percent, dataSource});
